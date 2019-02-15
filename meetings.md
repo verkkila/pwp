@@ -1,15 +1,16 @@
 # Meetings notes
 
 ## Meeting 1.
-* **DATE:**
-* **ASSISTANTS:**
+* **DATE:** 15.02.2019
+* **ASSISTANTS:** Mika Oja
 * **GRADE:** *To be filled by course staff*
 
 ### Minutes
-*Summary of what was discussed during the meeting*
+The text explaining our main concepts and relations was rather dense and lacked a diagram. Our API use cases were mostly listing human interfaces. We should focus more on machine clients to make things easier for the future.
 
 ### Action points
-*List here the actions points discussed with assistants*
+* Make diagram for concepts
+* Create API uses cases that are more related to machine clients rather than human interfaces
 
 
 ### Comments from staff
