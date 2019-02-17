@@ -13,7 +13,7 @@ class Routine(db.Model):
     routine_items = db.relationship(
         'RoutineItem', back_populates='routine')
     recurring_routine = db.relationship(
-        'RecurringRoutines', back_populates='routine')
+        'RecurringRoutine', back_populates='routine')
 
 
 class RoutineEvent(db.Model):
@@ -61,12 +61,12 @@ class Item(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
-    price = db.Column(db.Float, nullable=False)
+    value = db.Column(db.Float, nullable=False)
 
     routine_item = db.relationship('RoutineItem', back_populates='item')
 
 
-class RecurringRoutines(db.Model):
+class RecurringRoutine(db.Model):
     routine_id = db.Column(db.ForeignKey('routine.id'),
                            nullable=False, primary_key=True)
 
