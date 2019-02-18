@@ -326,3 +326,97 @@ def test_update_recurring_routine(db_handle):
     assert len(RecurringRoutine.query.filter_by(routine_id=routine2.id).all()) == 1
     assert len(RecurringRoutine.query.filter_by(recurring_interval=30).all()) == 1
     assert len(RecurringRoutine.query.filter_by(recurring_count=40).all()) == 1
+
+def test_delete_event(db_handle):
+    '''
+    Tests deleting Events
+    '''
+    event = _get_event()
+
+    db_handle.session.add(event)
+    db_handle.session.commit()
+
+    assert Event.query.count() == 1
+
+    db_handle.session.delete(event)
+    db_handle.session.commit()
+
+    assert Event.query.count() == 0
+
+def test_delete_routine_event(db_handle):
+    '''
+    Tests deleting RoutineEvents
+    '''
+    routine_event = RoutineEvent(event=_get_event(), routine=_get_routine())
+    db_handle.session.add(routine_event)
+    db_handle.session.commit()
+
+    assert RoutineEvent.query.count() == 1
+
+    db_handle.session.delete(routine_event)
+    db_handle.session.commit()
+
+    assert RoutineEvent.query.count() == 0
+
+def test_delete_item(db_handle):
+    '''
+    Tests deleting Items
+    '''
+    item = _get_item()
+
+    db_handle.session.add(item)
+    db_handle.session.commit()
+
+    assert Item.query.count() == 1
+
+    db_handle.session.delete(item)
+    db_handle.session.commit()
+
+    assert Item.query.count() == 0
+
+def test_delete_routine_item(db_handle):
+    '''
+    Tests deleting RoutineItems
+    '''
+    routine_item = RoutineItem(item=_get_item(), routine=_get_routine())
+    db_handle.session.add(routine_item)
+    db_handle.session.commit()
+
+    assert RoutineItem.query.count() == 1
+
+    db_handle.session.delete(routine_item)
+    db_handle.session.commit()
+
+    assert RoutineItem.query.count() == 0
+
+def test_delete_routine(db_handle):
+    '''
+    Tests deleting Routines
+    '''
+    routine = _get_routine()
+
+    db_handle.session.add(routine)
+    db_handle.session.commit()
+
+    assert Routine.query.count() == 1
+
+    db_handle.session.delete(routine)
+    db_handle.session.commit()
+
+    assert Routine.query.count() == 0
+
+def test_delete_recurring_routine(db_handle):
+    '''
+    Tests deleting RecurringRoutines
+    '''
+    rr = _get_recurring_routine()
+
+    db_handle.session.add(rr)
+    db_handle.session.commit()
+
+    assert RecurringRoutine.query.count() == 1
+
+    db_handle.session.delete(rr)
+    db_handle.session.commit()
+
+    assert RecurringRoutine.query.count() == 0
