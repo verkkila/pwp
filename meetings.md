@@ -17,15 +17,26 @@ The text explaining our main concepts and relations was rather dense and lacked 
 *ONLY USED BY COURSE STAFF: Additional comments from the course staff*
 
 ## Meeting 2.
-* **DATE:**
-* **ASSISTANTS:**
+* **DATE:** 28.02.2019
+* **ASSISTANTS:** Ivan Sanchez
 * **GRADE:** *To be filled by course staff*
 
 ### Minutes
-*Summary of what was discussed during the meeting*
+The readme file in this repository should contain instructions for setting up and running the program.
+As well as containing all the prerequisite libraries and dependencies.
+We should examine whether to have a one-to-many or many-to-many relationship between events/items and routines.
+Documentation should explain the difference between events and items and in general should explain the different
+models in the database.
+RoutineItem and RoutineEvent could be removed from models and replaced by a simple table.
+Foreign key tests should be implemented.
 
 ### Action points
-*List here the actions points discussed with assistants*
+* Documentation
+  1. For the program
+  2. For the models in the database
+
+* Re-examine the database models
+* Foreign key tests
 
 
 ### Comments from staff
