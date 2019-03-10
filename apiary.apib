@@ -23,23 +23,75 @@ Diary is a API to track daily activities.
                 "@controls":{
                     "self":{
                         "href": "/schedules/"
-                    }
+                    },
+                    "add":{
+                        "method":"POST",
+                        "encoding":"json",
+                        "href":"/schedules/123/"
+                        "schema":{
+                            "type":"object",
+                            "properties":{
+                                "start_time":{
+                                    "description":"Start time",
+                                    "type":"datetime",
+                                },
+                                "end_time":{
+                                    "description":"End time",
+                                    "type":"datetime",
+                                },
+                                "count":{
+                                    "description":"Recurring count",
+                                    "type":"int"
+                                },
+                                "interval_days":{
+                                    "description":"Recurring interval",
+                                    "type":"int"
+                                }
+                            }
+                        },
+                        "required":["start_time", "end_time"]
+                    },
                 },
                 "items":[
-                {
-                    "id": 123
-                    "start_time": "2014-12-03",
-                    "end_time": "2014-13-03",
-                    "@controls": {
-                        "self": {
-                            "href":"/schedules/123/"
-                    ,
+                    {
+                        "id": 123
+                        "start_time": "2014-12-03",
+                        "end_time": "2014-13-03",
+                        "@controls": {
+                            "self": {
+                                "href":"/schedules/123/"
+                            }
+                        }
                     }
-                }
                 ]
-            }
             
 + Response 404
+
+### Create schedule [POST]
+
++ Relation: add
+
++ Request
+
+
+    + Headers
+            
+            Accept: application/vnd.mason+json
+    
+    + Body
+        
+            {
+                "start_time": "2014-12-03",
+                "end_time": "2014-13-03",
+                "interval_days":0,
+                "count":1
+            }
+            
++ Response 201
+    
+    + Headers
+
+            Location: /schedules/123/ 
 
 ## Schedule [/schedules/{schedule_id}/]
 
@@ -61,15 +113,20 @@ Diary is a API to track daily activities.
         
             {
                 "id": 123
+                "repeat_of":1
                 "start_time": "2014-12-03",
                 "end_time": "2014-13-03",
                 "@controls": {
                     "self":{
                         "href": "/schedules/123/"
                     },
+                    "collection":{
+                        "href":"/schedules/"
+                    },
                     "edit":{
                         "method":"PUT",
                         "encoding":"json",
+                        "href":"/schedules/123/"
                         "schema":{
                             "type":"object",
                             "properties":{
@@ -80,32 +137,6 @@ Diary is a API to track daily activities.
                                 "end_time":{
                                     "description":"End time",
                                     "type":"datetime",
-                                }
-                            }
-                        },
-                        "required":["start_time", "end_time"]
-                    },
-                    "add":{
-                        "method":"POST",
-                        "encoding":"json",
-                        "schema":{
-                            "type":"object",
-                            "properties":{
-                                "start_time":{
-                                    "description":"Start time",
-                                    "type":"datetime",
-                                },
-                                "end_time":{
-                                    "description":"End time",
-                                    "type":"datetime",
-                                },
-                                "count":{
-                                    "description":"Recurring count",
-                                    "type":"int"
-                                },
-                                "interval_days":{
-                                    "description":"Recurring interval",
-                                    "type":"int"
                                 }
                             }
                         },
@@ -159,31 +190,6 @@ Diary is a API to track daily activities.
 
 + Response 404
 
-### Create schedule [POST]
-
-+ Relation: add
-
-+ Request
-
-
-    + Headers
-            
-            Accept: application/vnd.mason+json
-    
-    + Body
-        
-            {
-                "start_time": "2014-12-03",
-                "end_time": "2014-13-03",
-                "interval_days":0,
-                "count":1
-            }
-            
-+ Response 201
-    
-    + Headers
-
-            Location: /schedules/123/ 
 
 ### Edit schedule [PUT]
 
@@ -222,10 +228,25 @@ List all repeating schedules
     + Body
         
             {
-            
+                "@controls":{
+                    "self":{
+                        "href":"/repeating_schedules/"
+                    },
+                    "items":[
+                        {
+                            "id":1,
+                            "@controls":{
+                                "self":{
+                                    "href":"/repeating_schedules/1/"
+                            }
+                        }
+                    ]
+                }
             }
 
 + Response 404
+
+
 
 ## Repeating schedule [/repeating_schedules/{repeat_id}/]
 
@@ -249,9 +270,60 @@ Get all same schedule that is repeating
     + Body
         
             {
+                "id":1
+                "interval_days":0,
+                "count":1
+                "@controls":{
+                    "self":{
+                        "href":/repeating_schedules/1/"
+                    },
+                    "edit":{
+                        "method":"PATCH",
+                        "href":"/repeating_schedules/1/"
+                        "encoding":"json",
+                        "schema":{
+                            "type":"object",
+                            "properties":{
+                                "interval_days":{
+                                    "description":"recurring interval",
+                                    "type":int
+                                },
+                                "count":{
+                                    "description":"recurring count",
+                                    "type":int
+                                }
+                            }
+                        },
+                        "required":["interval_days","count"]
+                    },
+                    "collection":{
+                        "href":"/repeating_schedules/"
+                    }
+                }
             }
 
 + Response 404
+
+### Update recurrence [PATCH]
+
++ Relation: edit
+
++ Request
+    
+    + Headers
+            
+            Accept: application/vnd.mason+json
+    
+    + Body
+        
+            {
+                "interval_days": 0,
+                "count": 1
+            }
+
++ Response 204
+
+
 
 ## Event collection [/schedules/{schedule_id}/events]
 
