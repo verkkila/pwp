@@ -1,80 +1,244 @@
 FORMAT: 1A
-HOST: http://polls.apiblueprint.org/
+HOST: http://localhost:5000/
 
-# PWP
+# PWP Diary API
 
-Polls is a simple API allowing consumers to view polls and vote in them.
+Diary is a API to track daily activities.
 
-## Questions Collection [/questions]
+## Schedule Collection [/schedules/]
 
-### List All Questions [GET]
+### List all schedules [GET]
 
-+ Response 200 (application/json)
-
-        [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
-            }
-        ]
-
-### Create a New Question [POST]
-
-You may create your own question using this action. It takes a JSON
-object containing a question and a collection of answers in the
-form of choices.
-
-+ Request (application/json)
-
-        {
-            "question": "Favourite programming language?",
-            "choices": [
-                "Swift",
-                "Python",
-                "Objective-C",
-                "Ruby"
-            ]
-        }
-
-+ Response 201 (application/json)
-
++ Request
+    
     + Headers
-
-            Location: /questions/2
+        
+            Accept: application/vnd.mason+json
+        
++ Response 200
 
     + Body
-
+        
             {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 0
-                    }, {
-                        "choice": "Python",
-                        "votes": 0
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 0
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 0
-                    }
-                ]
             }
++ Response 404
+
+## Schedule [/schedules/{schedule_id}/]
+
++ Parameters 
+    
+    + schedule_id (int) - schedules unique id
+
+### Schedule information [GET]
+
++ Request
+    
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 200
+
+    + Body
+        
+            {
+            }
+
++ Response 404
+
+## Repeating schedules collection [/repeating_schedules/]
+
+List all repeating schedules
+
+### Get repeating schedules [GET]
+
++ Request
+    
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 200
+
+    + Body
+        
+            {
+            }
+
++ Response 404
+
+## Repeating schedule [/repeating_schedules/{repeat_id}/]
+
++ Parameters 
+    
+    + repeat_id (int) - unique id of repeating schedule
+
+
+### List all schedules [GET]
+
+Get all same schedule that is repeating
+
++ Request
+    
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 200
+
+    + Body
+        
+            {
+            }
+
++ Response 404
+
+## Event collection [/schedules/{schedule_id}/events]
+
++ Parameters 
+    
+    + schedule_id (int) - schedules unique id
+
+### Get events [GET]
+
+Get all events of one schedule
+
++ Request
+    
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 200
+
+    + Body
+        
+            {
+            }
+
++ Response 404
+
+
+## Event [/schedules/{schedule_id}/events/{event_id}]
+
++ Parameters 
+    
+    + schedule_id (int) - schedules unique id
+    + event_id (int) - unique event id
+
+### Get event information [GET]
+
++ Request
+    
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 200
+
+    + Body
+        
+            {
+            }
+
++ Response 404
+
+## Item collection [/schedules/{schedule_id}/items/]
+
++ Parameters 
+    
+    + schedule_id (int) - schedules unique id
+
+
+### Get items [GET]
+
+Get all schedules items
+
++ Request
+    
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 200
+
+    + Body
+        
+            {
+            }
+            
++ Response 404
+
+## Item [/schedules/{schedule_id}/items/{item_id}/]
+
++ Parameters 
+    
+    + schedule_id (int) - schedules unique id
+    + item_id (int) - unique item id
+
+### Get item information [GET]
+
++ Request
+    
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 200
+
+    + Body
+        
+            {
+            }
+
++ Response 404
+
+## Task collection [/schedules/{schedule_id}/tasks/]
+
++ Parameters 
+    
+    + schedule_id (int) - schedules unique id
+
+### Get tasks [GET]
+
+Get all schedules tasks
+
++ Request
+    
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 200
+
+    + Body
+        
+            {
+            }
+
++ Response 404
+
+## Task [/schedules/{schedule_id}/tasks/{task_id}/]
+
++ Parameters
+    
+    + schedule_id (int) - schedules unique id
+    + task_id (int) - unique task id
+
+
+### Get task information [GET]
+
++ Request
+    
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 200
+
+    + Body
+        
+            {
+            }
+
++ Response 404
