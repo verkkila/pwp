@@ -20,7 +20,25 @@ Diary is a API to track daily activities.
     + Body
         
             {
+                "@controls":{
+                    "self":{
+                        "href": "/schedules/"
+                    }
+                },
+                "items":[
+                {
+                    "id": 123
+                    "start_time": "2014-12-03",
+                    "end_time": "2014-13-03",
+                    "@controls": {
+                        "self": {
+                            "href":"/schedules/123/"
+                    ,
+                    }
+                }
+                ]
             }
+            
 + Response 404
 
 ## Schedule [/schedules/{schedule_id}/]
