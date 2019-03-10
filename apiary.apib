@@ -60,9 +60,150 @@ Diary is a API to track daily activities.
     + Body
         
             {
+                "id": 123
+                "start_time": "2014-12-03",
+                "end_time": "2014-13-03",
+                "@controls": {
+                    "self":{
+                        "href": "/schedules/123/"
+                    },
+                    "edit":{
+                        "method":"PUT",
+                        "encoding":"json",
+                        "schema":{
+                            "type":"object",
+                            "properties":{
+                                "start_time":{
+                                    "description":"Start time",
+                                    "type":"datetime",
+                                },
+                                "end_time":{
+                                    "description":"End time",
+                                    "type":"datetime",
+                                }
+                            }
+                        },
+                        "required":["start_time", "end_time"]
+                    },
+                    "add":{
+                        "method":"POST",
+                        "encoding":"json",
+                        "schema":{
+                            "type":"object",
+                            "properties":{
+                                "start_time":{
+                                    "description":"Start time",
+                                    "type":"datetime",
+                                },
+                                "end_time":{
+                                    "description":"End time",
+                                    "type":"datetime",
+                                },
+                                "count":{
+                                    "description":"Recurring count",
+                                    "type":"int"
+                                },
+                                "interval_days":{
+                                    "description":"Recurring interval",
+                                    "type":"int"
+                                }
+                            }
+                        },
+                        "required":["start_time", "end_time"]
+                    },
+                    "delete":{
+                        "method":"DELETE"
+                        "href":"/schedules/123/"
+                    }
+                },
+                "items":[
+                    {
+                        "event":{
+                            "@controls":{
+                                "self":{
+                                    "href":"/schedules/123/events/"
+                                }
+                            }
+                        },
+                        "item":{
+                            "@controls":{
+                                "self":{
+                                    "href":"/schedules/123/items/"
+                                }
+                            }
+                        },
+                        "task":{
+                            "@controls":{
+                                "self":{
+                                    "href":"/schedules/123/tasks/"
+                                }
+                            }
+                        }
+                    }
+                ]
             }
 
 + Response 404
+
+### Delete schedule [DELETE]
+
++ Relation: delete
+
++ Request 
+
+    + Headers
+
+            Accept: application/vnd.mason+json
+
++ Response 204
+
++ Response 404
+
+### Create schedule [POST]
+
++ Relation: add
+
++ Request
+
+
+    + Headers
+            
+            Accept: application/vnd.mason+json
+    
+    + Body
+        
+            {
+                "start_time": "2014-12-03",
+                "end_time": "2014-13-03",
+                "interval_days":0,
+                "count":1
+            }
+            
++ Response 201
+    
+    + Headers
+
+            Location: /schedules/123/ 
+
+### Edit schedule [PUT]
+
++ Relation: edit
+
++ Request
+    
+    + Headers
+            
+            Accept: application/vnd.mason+json
+    
+    + Body
+        
+            {
+                "start_time": "2014-12-03",
+                "end_time": "2014-13-03"
+            }
+
++ Response 204
+
 
 ## Repeating schedules collection [/repeating_schedules/]
 
@@ -81,6 +222,7 @@ List all repeating schedules
     + Body
         
             {
+            
             }
 
 + Response 404
