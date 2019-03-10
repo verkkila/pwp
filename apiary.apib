@@ -5,9 +5,37 @@ HOST: http://localhost:5000/
 
 Diary is a API to track daily activities.
 
+# Group link Relations
+
+## add-schedule
+
+This is a control that is used to add new schedule
+
+## all-schedules
+
+This is a control that is used to list all schedules
+
+## events-in
+
+This is a control that is used to acces all events in schedule
+
+## items-in
+
+This is a control that is used to acces all items in schedule
+
+## tasks-in
+
+This is a control that is used to acces all tasks in schedule
+
+## delete
+
+Deletes assoiceated resource
+
 ## Schedule Collection [/schedules/]
 
 ### List all schedules [GET]
+
++ Relation: all-schedules
 
 + Request
     
@@ -20,11 +48,16 @@ Diary is a API to track daily activities.
     + Body
         
             {
+                "@namespaces":{
+                    "diary":{
+                        "name":/diary/link-relations#"
+                    }
+                },
                 "@controls":{
                     "self":{
                         "href": "/schedules/"
                     },
-                    "add":{
+                    "diary:add-schedule":{
                         "method":"POST",
                         "encoding":"json",
                         "href":"/schedules/123/"
@@ -69,7 +102,7 @@ Diary is a API to track daily activities.
 
 ### Create schedule [POST]
 
-+ Relation: add
++ Relation: diary:add-schedule
 
 + Request
 
@@ -112,6 +145,11 @@ Diary is a API to track daily activities.
     + Body
         
             {
+                "@namespaces":{
+                    "diary":{
+                        "name":/diary/link-relations#"
+                    }
+                },
                 "id": 123
                 "repeat_of":1
                 "start_time": "2014-12-03",
@@ -142,7 +180,7 @@ Diary is a API to track daily activities.
                         },
                         "required":["start_time", "end_time"]
                     },
-                    "delete":{
+                    "diary:delete":{
                         "method":"DELETE"
                         "href":"/schedules/123/"
                     }
@@ -270,6 +308,11 @@ Get all same schedule that is repeating
     + Body
         
             {
+                "@namespaces":{
+                    "diary":{
+                        "name":/diary/link-relations#"
+                    }
+                },
                 "id":1
                 "interval_days":0,
                 "count":1
