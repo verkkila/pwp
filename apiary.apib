@@ -9,7 +9,7 @@ Diary is a API to track daily activities.
 
 ## add-schedule
 
-This is a control that is used to add new schedule
+This is a control that is used to add a new schedule
 
 ## all-schedules
 
@@ -17,21 +17,21 @@ This is a control that is used to list all schedules
 
 ## events-in
 
-This is a control that is used to acces all events in schedule
+This is a control that is used to access all events in schedule
 
 ## items-in
 
-This is a control that is used to acces all items in schedule
+This is a control that is used to access all items in schedule
 
 ## tasks-in
 
-This is a control that is used to acces all tasks in schedule
+This is a control that is used to access all tasks in schedule
 
 ## delete
 
-Deletes assoiceated resource
+Deletes the associated resource
 
-## Schedule Collection [/schedules/]
+## Schedule collection [/schedules/]
 
 ### List all schedules [GET]
 
@@ -389,7 +389,47 @@ Get all events of one schedule
     + Body
         
             {
+                "@controls":{
+                    "self":{
+                        "href":"/schedules/{schedule_id}/events/"
+                    },
+                    "items":[
+                        {
+                            "id":123,
+                            "@controls":{
+                                "self":{
+                                    "href":"/schedules/123/events/"
+                            }
+                        }
+                    ]
+                }
             }
+
++ Response 404
+
+### Create event [POST]
+
+Add a new event into a schedule
+
++ Request
+
+    + Headers
+    
+            Accept: application/vnd.mason+json
+
+    + Body
+    
+            {
+                "name": "event_name",
+                "duration": 2,
+                "note": "example note"
+            }
+
++ Response 201
+
+    + Headers
+        
+            Location: /schedules/123/events/1/
 
 + Response 404
 
@@ -415,6 +455,40 @@ Get all events of one schedule
         
             {
             }
+
++ Response 404
+
+### Update event [PATCH]
+
++ Relation: edit
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.mason+json
+    
+    + Body
+
+            {
+                "name": "new_name",
+                "duration": 3,
+                "note": "new note"
+            }
+
++ Response 204
+
+### Delete event [DELETE]
+
++ Relation: delete
+
++ Request 
+
+    + Headers
+
+            Accept: application/vnd.mason+json
+
++ Response 204
 
 + Response 404
 
