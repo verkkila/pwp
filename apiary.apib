@@ -514,8 +514,47 @@ Get all schedules items
     + Body
         
             {
+                "@controls":{
+                    "self":{
+                        "href":"/schedules/{schedule_id}/items/"
+                    },
+                    "items":[
+                        {
+                            "id":123,
+                            "@controls":{
+                                "self":{
+                                    "href":"/schedules/123/items/"
+                            }
+                        }
+                    ]
+                }
             }
             
++ Response 404
+
+### Create item [POST]
+
+Add a new item into a schedule
+
++ Request
+
+    + Headers
+    
+            Accept: application/vnd.mason+json
+    
+    + Body
+    
+            {
+                "name": "item_name",
+                "value": "15.0"
+            }
+            
++ Response 201
+    
+    + Headers
+    
+            Location: /schedules/123/items/1/
+
 + Response 404
 
 ## Item [/schedules/{schedule_id}/items/{item_id}/]
