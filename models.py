@@ -1,76 +1,86 @@
 from app import app, db
 
+class RepeatSchedule(db.Model):
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    interval_days = db.Column(db.Integer, default=0)
+    count = db.Column(db.Integer, default=1)
+    schedule = db.relationship("Schedule", back_populates="repeat_schedule")
 
-class Routine(db.Model):
-
+class Schedule(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
+    repeat_of = db.Column(db.Integer, db.ForeignKey("repeat_schedule.id"))
 
-    routine_events = db.relationship(
-        'RoutineEvent', back_populates='routine')
-    routine_items = db.relationship(
-        'RoutineItem', back_populates='routine')
-    recurring_routine = db.relationship(
-        'RecurringRoutine', back_populates='routine')
+    repeat_schedule = db.relationship("RepeatSchedule", back_populates="schedule")
+    schedule_events = db.relationship("ScheduleEvent", back_populates="schedule", cascade="delete, delete-orphan")
+    schedule_tasks = db.relationship("ScheduleTask", back_populates="schedule", cascade="delete, delete-orphan")
+    schedule_items = db.relationship("ScheduleItem", back_populates="schedule", cascade="delete, delete-orphan")
 
-
-class RoutineEvent(db.Model):
+class ScheduleEvent(db.Model):
     __table_args__ = (
-        db.PrimaryKeyConstraint('routine_id', 'event_id'),
+        db.PrimaryKeyConstraint('schedule_id', 'event_id'),
     )
-    routine_id = db.Column(
-        db.ForeignKey('routine.id'), nullable=False)
+    schedule_id = db.Column(
+        db.ForeignKey('schedule.id'), nullable=False)
     event_id = db.Column(
         db.ForeignKey('event.id'), nullable=False)
 
-    routine = db.relationship(
-        'Routine', back_populates='routine_events')
+    schedule = db.relationship(
+        'Schedule', back_populates='schedule_events')
     event = db.relationship(
-        'Event', back_populates='routine_event')
+        'Event', back_populates='schedule_event')
 
-
-class Event(db.Model):
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
-    goal = db.Column(db.Integer, nullable=True)
-    value = db.Column(db.Integer, default=0)
-    duration = db.Column(db.Integer, default=0)
-    note = db.Column(db.String, nullable=True)
-
-    routine_event = db.relationship(
-        'RoutineEvent', back_populates='event')
-
-
-class RoutineItem(db.Model):
+class ScheduleTask(db.Model):
     __table_args__ = (
-        db.PrimaryKeyConstraint('routine_id', 'item_id'),
+        db.PrimaryKeyConstraint('schedule_id', 'task_id'),
     )
-    routine_id = db.Column(
-        db.ForeignKey('routine.id'), nullable=False)
+    schedule_id = db.Column(
+        db.ForeignKey('schedule.id'), nullable=False)
+    task_id = db.Column(
+        db.ForeignKey('task.id'), nullable=False)
+
+    schedule = db.relationship(
+            'Schedule', back_populates='schedule_tasks')
+    task = db.relationship(
+            'Task', back_populates='schedule_task')
+
+class ScheduleItem(db.Model):
+    __table_args__ = (
+        db.PrimaryKeyConstraint('schedule_id', 'item_id'),
+    )
+    schedule_id = db.Column(
+        db.ForeignKey('schedule.id'), nullable=False)
     item_id = db.Column(
         db.ForeignKey('item.id'), nullable=False)
 
-    routine = db.relationship('Routine', back_populates='routine_items')
-    item = db.relationship('Item', back_populates='routine_item')
+    schedule = db.relationship(
+            'Schedule', back_populates='schedule_items')
+    item = db.relationship(
+            'Item', back_populates='schedule_item')
 
+class Event(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    duration = db.Column(db.Integer, default=0)
+    note = db.Column(db.String, nullable=True)
+
+    schedule_event = db.relationship("ScheduleEvent", back_populates="event", cascade="delete, delete-orphan")
+
+class Task(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    priority = db.Column(db.Integer, nullable=False, default=0)
+    goal = db.Column(db.String)
+    result = db.Column(db.String)
+
+    schedule_task = db.relationship("ScheduleTask", back_populates="task", cascade="delete, delete-orphan")
 
 class Item(db.Model):
-
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     value = db.Column(db.Float, nullable=False)
 
-    routine_item = db.relationship('RoutineItem', back_populates='item')
+    schedule_item = db.relationship('ScheduleItem', back_populates='item', cascade="delete, delete-orphan")
 
-
-class RecurringRoutine(db.Model):
-    routine_id = db.Column(db.ForeignKey('routine.id'),
-                           nullable=False, primary_key=True)
-
-    recurring_interval = db.Column(db.Integer, default=0)
-    recurring_count = db.Column(db.Integer, default=1)
-
-    routine = db.relationship('Routine', back_populates='recurring_routine')
