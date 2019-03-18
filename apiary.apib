@@ -11,6 +11,14 @@ Diary is a API to track daily activities.
 
 This is a control that is used to add a new schedule
 
+## add-item
+
+This is a control that is used to add a new item
+
+## add-task
+
+This is a control that is used to add a new task
+
 ## all-schedules
 
 This is a control that is used to list all schedules
@@ -46,7 +54,7 @@ Deletes the associated resource
 + Response 200
 
     + Body
-        
+
             {
                 "@namespaces":{
                     "diary":{
@@ -575,11 +583,102 @@ Add a new item into a schedule
 + Response 200
 
     + Body
-        
+
             {
+                "@namespaces":{
+                    "diary":{
+                        "name":"/diary/link-relations#"
+                    }
+                },
+                "name":"item_name",
+                "value":"item_value",
+                "@controls": {
+                    "self":{
+                        "href": "/schedules/123/items/1/"
+                    },
+                    "collection":{
+                        "href":"/schedules/123/items/"
+                    },
+                    "edit":{
+                        "method":"PUT",
+                        "encoding":"json",
+                        "href":"/schedules/123/items/1/",
+                        "schema":{
+                            "type":"object",
+                            "properties":{
+                                "name":{
+                                    "description":"Item name",
+                                    "type":"string"
+                                },
+                                "value":{
+                                    "description":"Item value",
+                                    "type":"string"
+                                }
+                            }
+                        },
+                        "required":["name", "value"]
+                    },
+                    "diary:delete":{
+                        "method":"DELETE",
+                        "href":"/schedules/123/items/1"
+                    }
+                }
             }
 
 + Response 404
+
+### Modify item [PUT]
+
++ Relation: edit
++ Request (application/json)
+
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
+    + Body
+    
+            {
+                "name": "item_name",
+                "value": "item_value"
+            }
+        
++ Response 204
+
++ Response 400
+
+    The client is trying to send a JSON document that doesn't validate against the schema
+    
+    + Body
+
++ Response 415
+
+    The client sent a request with the wrong content type or the request body was not valid JSON.
+    
+    + Body
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to retrieve an item that doesn't exist.
+    
+    + Body
+
+### Delete item [DELETE]
+
++ Relation: delete
++ Request
+
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 204
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to delete an item that doesn't exist (due to non-existent schedule or item).
+
+    + Body
 
 ## Task collection [/schedules/{schedule_id}/tasks/]
 
@@ -600,11 +699,100 @@ Get all schedules tasks
 + Response 200
 
     + Body
-        
+
             {
+                "@namespaces":{
+                    "diary":{
+                        "name":"/diary/link-relations#"
+                    }
+                },
+                "@controls":{
+                    "self":{
+                        "href": "/schedules/123/tasks/"
+                    },
+                    "diary:add-task":{
+                        "method":"POST",
+                        "encoding":"json",
+                        "href":"/schedules/123/tasks/1/",
+                        "schema":{
+                            "type":"object",
+                            "properties":{
+                                "name":{
+                                    "description":"Task name",
+                                    "type":"string"
+                                },
+                                "priority":{
+                                    "description":"Task priority",
+                                    "type":"int"
+                                },
+                                "goal":{
+                                    "description":"Task goal",
+                                    "type":"string"
+                                },
+                                "result":{
+                                    "description":"Task result",
+                                    "type":"string"
+                                }
+                            }
+                        },
+                        "required":["name", "priority"]
+                    },
+                }
+                "items":[
+                    {
+                        "id": 1,
+                        "name": "task_name",
+                        "priority": 1,
+                        "goal": "task_goal",
+                        "result": "task_result",
+                        "@controls": {
+                            "self": {
+                                "href":"/schedules/123/tasks/1/"
+                            }
+                        }
+                    }
+                ]
             }
 
 + Response 404
+
+### Add new task [POST]
+
++ Relation: add-task
++ Request (application/json)
+
+    + Headers
+    
+            Accept: application/vnd.mason+json
+        
+    + Body
+
+            {
+                "name": "task_name",
+                "priority": 1,
+                "goal": "task_goal",
+                "result": "task_result"
+            }
+
++ Response 204
+
++ Response 201
+
+    + Headers
+        
+            Location: /schedules/123/tasks/1/
+
++ Response 400
+
+    The client is trying to send a JSON document that doesn't validate against the schema
+    
+    + Body
+
++ Response 415
+
+    The client sent a request with the wrong content type or the request body was not valid JSON.
+    
+    + Body
 
 ## Task [/schedules/{schedule_id}/tasks/{task_id}/]
 
@@ -625,8 +813,112 @@ Get all schedules tasks
 + Response 200
 
     + Body
-        
+
             {
+                "@namespaces":{
+                    "diary":{
+                        "name":"/diary/link-relations#"
+                    }
+                },
+                "id": 1,
+                "name": "task_name",
+                "priority": 1,
+                "goal": "task_goal",
+                "result": "task_result",
+                "@controls": {
+                    "self":{
+                        "href": "/schedules/123/tasks/1/"
+                    },
+                    "collection":{
+                        "href":"/schedules/123/tasks/"
+                    },
+                    "edit":{
+                        "method":"PUT",
+                        "encoding":"json",
+                        "href":"/schedules/123/tasks/1/",
+                        "schema":{
+                            "type":"object",
+                            "properties":{
+                                "name":{
+                                    "description":"Task name",
+                                    "type":"string"
+                                },
+                                "priority":{
+                                    "description":"Task priority",
+                                    "type":"int"
+                                },
+                                "goal":{
+                                    "description":"Task goal",
+                                    "type":"string"
+                                },
+                                "result":{
+                                    "description":"Task result",
+                                    "type":"string"
+                                }
+                            }
+                        },
+                        "required":["name", "priority"]
+                    },
+                    "diary:delete":{
+                        "method":"DELETE",
+                        "href":"/schedules/123/tasks/1/"
+                    }
+                }
             }
 
 + Response 404
+
+### Modify task [PUT]
+
++ Relation: edit
++ Request (application/json)
+
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
+    + Body
+
+            {
+                "name": "task_name",
+                "priority": 1,
+                "goal": "task_goal",
+                "result": "task_result"
+            }
+        
++ Response 204
+
++ Response 400
+
+    The client is trying to send a JSON document that doesn't validate against the schema
+    
+    + Body
+
++ Response 415
+
+    The client sent a request with the wrong content type or the request body was not valid JSON.
+    
+    + Body
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to retrieve a task that doesn't exist.
+    
+    + Body
+
+### Delete task [DELETE]
+
++ Relation: delete
++ Request
+
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 204
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to delete a task that doesn't exist (due to non-existent schedule or task).
+
+    + Body
