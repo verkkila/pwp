@@ -1,10 +1,13 @@
 import os
 import tempfile
+import sys
 from datetime import datetime, timedelta
 
 import pytest
 from sqlalchemy.engine import Engine
 from sqlalchemy import event
+
+sys.path.append("../")
 
 from src.app import app, db
 from src.models import Schedule, RepeatSchedule, ScheduleEvent, ScheduleTask, ScheduleItem, Event, Task, Item
@@ -62,13 +65,6 @@ def _get_schedule():
         end_time=end
     )
 
-def _get_repeat_schedule():
-    return RepeatSchedule(
-        interval_days=20,
-        count=15
-    )
-
-
 def test_add_event_schedule(db_handle):
     '''
     Tests that creating the relationship table between events and schedules work
@@ -121,16 +117,6 @@ def test_add_item_schedule(db_handle):
     assert Schedule.query.count() == 1
     assert Item.query.count() == 1
     assert ScheduleItem.query.count() == 1
-
-def test_add_repeat_schedule(db_handle):
-    '''
-    Tests that creating a repeating schedule works
-    '''
-    repeat_schedule = _get_repeat_schedule()
-    db_handle.session.add(repeat_schedule)
-    db_handle.session.commit()
-
-    assert RepeatSchedule.query.count() == 1
 
 def test_query_event(db_handle):
     '''
@@ -243,20 +229,6 @@ def test_query_schedule(db_handle):
 
     assert len(Schedule.query.filter_by(name="Gym").all()) == 1
     assert len(Schedule.query.filter_by(name="Jog").all()) == 0
-
-def test_query_repeat_schedule(db_handle):
-    '''
-    Tests the success and failure of querying recurring routines by their intervals and counts
-    '''
-    repeat_schedule = _get_repeat_schedule()
-    db_handle.session.add(repeat_schedule)
-    db_handle.session.commit()
-
-    assert len(RepeatSchedule.query.filter_by(interval_days=20).all()) == 1
-    assert len(RepeatSchedule.query.filter_by(count=15).all()) == 1
-
-    assert len(RepeatSchedule.query.filter_by(interval_days=30).all()) == 0
-    assert len(RepeatSchedule.query.filter_by(count=25).all()) == 0
 
 def test_update_event(db_handle):
     '''
@@ -391,25 +363,6 @@ def test_update_schedule(db_handle):
     assert s_updated.start_time.month == 4
     assert s_updated.start_time.day == 3
 
-def test_update_repeat_schedule(db_handle):
-    '''
-    Tests updating the intervals and counts of repeating schedules
-    '''
-    repeat_schedule = _get_repeat_schedule()
-
-    db_handle.session.add(repeat_schedule)
-    db_handle.session.commit()
-
-    rs = RepeatSchedule.query.filter_by(id=repeat_schedule.id).first()
-    assert rs is not None
-    rs.interval_days = 30
-    rs.count = 40
-
-    db_handle.session.commit()
-
-    assert len(RepeatSchedule.query.filter_by(interval_days=30).all()) == 1
-    assert len(RepeatSchedule.query.filter_by(count=40).all()) == 1
-
 def test_delete_event(db_handle):
     '''
     Tests deleting events
@@ -519,22 +472,6 @@ def test_delete_schedule(db_handle):
 
     assert Schedule.query.count() == 0
 
-def test_delete_repeat_schedule(db_handle):
-    '''
-    Tests deleting repeating schedules
-    '''
-    rs = _get_repeat_schedule()
-
-    db_handle.session.add(rs)
-    db_handle.session.commit()
-
-    assert RepeatSchedule.query.count() == 1
-
-    db_handle.session.delete(rs)
-    db_handle.session.commit()
-
-    assert RepeatSchedule.query.count() == 0
-
 def test_cascade_schedule_tables(db_handle):
     '''
     Tests that corresponding rows of ScheduleEvent/-Task/-Item tables are deleted when the events/tasks/items are deleted
@@ -592,22 +529,3 @@ def test_cascade_schedule_tables_2(db_handle):
     assert ScheduleEvent.query.count() == 0
     assert ScheduleTask.query.count() == 0
     assert ScheduleItem.query.count() == 0
-
-def test_schedule_foreign_key_null(db_handle):
-    '''
-    Tests that the repeat_of field of schedule is nulled when the repeat schedule is deleted from the db
-    '''
-    repeat_schedule = _get_repeat_schedule()
-    schedule = _get_schedule()
-
-    schedule.repeat_schedule = repeat_schedule
-
-    db_handle.session.add(repeat_schedule)
-    db_handle.session.add(schedule)
-    db_handle.session.commit()
-
-    assert Schedule.query.filter_by(name="Gym").first().repeat_of == repeat_schedule.id
-
-    db_handle.session.delete(repeat_schedule)
-
-    assert Schedule.query.filter_by(name="Gym").first().repeat_of is None
