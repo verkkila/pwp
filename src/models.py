@@ -50,9 +50,7 @@ class Schedule(db.Model):
     name = db.Column(db.String, nullable=False)
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
-    repeat_of = db.Column(db.Integer, db.ForeignKey("repeat_schedule.id"))
 
-    repeat_schedule = db.relationship("RepeatSchedule", back_populates="schedule")
     schedule_events = db.relationship("ScheduleEvent", back_populates="schedule", cascade="delete, delete-orphan")
     schedule_tasks = db.relationship("ScheduleTask", back_populates="schedule", cascade="delete, delete-orphan")
     schedule_items = db.relationship("ScheduleItem", back_populates="schedule", cascade="delete, delete-orphan")
