@@ -1,4 +1,4 @@
-from app import app, db
+from src.app import app, db
 
 class RepeatSchedule(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)

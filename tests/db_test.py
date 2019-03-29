@@ -6,8 +6,8 @@ import pytest
 from sqlalchemy.engine import Engine
 from sqlalchemy import event
 
-from app import app, db
-from models import Schedule, RepeatSchedule, ScheduleEvent, ScheduleTask, ScheduleItem, Event, Task, Item
+from src.app import app, db
+from src.models import Schedule, RepeatSchedule, ScheduleEvent, ScheduleTask, ScheduleItem, Event, Task, Item
 
 
 @event.listens_for(Engine, "connect")
