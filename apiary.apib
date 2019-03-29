@@ -1,0 +1,792 @@
+FORMAT: 1A
+HOST: http://localhost:5000/
+
+# PWP Diary API
+
+Diary is a API to track daily activities.
+
+# Group link Relations
+
+## add-schedule
+
+This is a control that is used to add a new schedule
+
+## add-item
+
+This is a control that is used to add a new item
+
+## add-task
+
+This is a control that is used to add a new task
+
+## all-schedules
+
+This is a control that is used to list all schedules
+
+## events-in
+
+This is a control that is used to access all events in schedule
+
+## items-in
+
+This is a control that is used to access all items in schedule
+
+## tasks-in
+
+This is a control that is used to access all tasks in schedule
+
+## delete
+
+Deletes the associated resource
+
+## Schedule collection [/schedules/]
+
+### List all schedules [GET]
+
++ Relation: all-schedules
+
++ Request
+    
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 200
+
+    + Body
+
+            {
+                "@namespaces":{
+                    "diary":{
+                        "name":/diary/link-relations#"
+                    }
+                },
+                "@controls":{
+                    "self":{
+                        "href": "/schedules/"
+                    },
+                    "diary:add-schedule":{
+                        "method":"POST",
+                        "encoding":"json",
+                        "href":"/schedules/123/"
+                        "schema":{
+                            "type":"object",
+                            "properties":{
+                                "start_time":{
+                                    "description":"Start time",
+                                    "type":"datetime",
+                                },
+                                "end_time":{
+                                    "description":"End time",
+                                    "type":"datetime",
+                                },
+                                "count":{
+                                    "description":"Recurring count",
+                                    "type":"int"
+                                },
+                                "interval_days":{
+                                    "description":"Recurring interval",
+                                    "type":"int"
+                                }
+                            }
+                        },
+                        "required":["start_time", "end_time"]
+                    },
+                },
+                "items":[
+                    {
+                        "id": 123
+                        "start_time": "2014-12-03",
+                        "end_time": "2014-13-03",
+                        "@controls": {
+                            "self": {
+                                "href":"/schedules/123/"
+                            }
+                        }
+                    }
+                ]
+            
++ Response 404
+
+### Create schedule [POST]
+
++ Relation: add-schedule
+
++ Request
+
+
+    + Headers
+            
+            Accept: application/vnd.mason+json
+    
+    + Body
+        
+            {
+                "start_time": "2014-12-03",
+                "end_time": "2014-13-03",
+                "interval_days":0,
+                "count":1
+            }
+            
++ Response 201
+    
+    + Headers
+
+            Location: /schedules/123/ 
+
+## Schedule [/schedules/{schedule_id}/]
+
++ Parameters 
+    
+    + schedule_id (int) - schedules unique id
+
+### Schedule information [GET]
+
++ Request
+    
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 200
+
+    + Body
+        
+            {
+                "@namespaces":{
+                    "diary":{
+                        "name":/diary/link-relations#"
+                    }
+                },
+                "id": 123
+                "start_time": "2014-12-03",
+                "end_time": "2014-13-03",
+                "@controls": {
+                    "self":{
+                        "href": "/schedules/123/"
+                    },
+                    "collection":{
+                        "href":"/schedules/"
+                    },
+                    "edit":{
+                        "method":"PUT",
+                        "encoding":"json",
+                        "href":"/schedules/123/"
+                        "schema":{
+                            "type":"object",
+                            "properties":{
+                                "start_time":{
+                                    "description":"Start time",
+                                    "type":"datetime",
+                                },
+                                "end_time":{
+                                    "description":"End time",
+                                    "type":"datetime",
+                                }
+                            }
+                        },
+                        "required":["start_time", "end_time"]
+                    },
+                    "diary:delete":{
+                        "method":"DELETE"
+                        "href":"/schedules/123/"
+                    }
+                },
+                "items":[
+                    {
+                     "@controls":{
+                        "event":{
+                            "href":"/schedules/123/events/"
+                            },
+                        "item":{
+                                "href":"/schedules/123/items/"
+                            },
+                        "task":{
+                            "href":"/schedules/123/tasks/"
+                            }
+                        }
+                    }
+                ]
+
++ Response 404
+
+### Delete schedule [DELETE]
+
++ Relation: delete
+
++ Request 
+
+    + Headers
+
+            Accept: application/vnd.mason+json
+
++ Response 204
+
++ Response 404
+
+
+### Edit schedule [PUT]
+
++ Relation: edit
+
++ Request
+    
+    + Headers
+            
+            Accept: application/vnd.mason+json
+    
+    + Body
+        
+            {
+                "start_time": "2014-12-03",
+                "end_time": "2014-13-03"
+            }
+
++ Response 204
+
+## Event collection [/schedules/{schedule_id}/events]
+
++ Parameters 
+    
+    + schedule_id (int) - schedules unique id
+
+### Get events [GET]
+
+Get all events of one schedule
+
++ Request
+    
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 200
+
+    + Body
+        
+            {
+                "@controls":{
+                    "self":{
+                        "href":"/schedules/{schedule_id}/events/"
+                    },
+                    "items":[
+                        {
+                            "id":123,
+                            "@controls":{
+                                "self":{
+                                    "href":"/schedules/123/events/"
+                            }
+                        }
+                    ]
+                }
+            }
+
++ Response 404
+
+### Create event [POST]
+
+Add a new event into a schedule
+
++ Request
+
+    + Headers
+    
+            Accept: application/vnd.mason+json
+
+    + Body
+    
+            {
+                "name": "event_name",
+                "duration": 2,
+                "note": "example note"
+            }
+
++ Response 201
+
+    + Headers
+        
+            Location: /schedules/123/events/1/
+
++ Response 404
+
+
+## Event [/schedules/{schedule_id}/events/{event_id}]
+
++ Parameters 
+    
+    + schedule_id (int) - schedules unique id
+    + event_id (int) - unique event id
+
+### Get event information [GET]
+
++ Request
+    
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 200
+
+    + Body
+        
+            {
+            }
+
++ Response 404
+
+### Update event [PATCH]
+
++ Relation: edit
+
++ Request
+
+    + Headers
+
+            Accept: application/vnd.mason+json
+    
+    + Body
+
+            {
+                "name": "new_name",
+                "duration": 3,
+                "note": "new note"
+            }
+
++ Response 204
+
+### Delete event [DELETE]
+
++ Relation: delete
+
++ Request 
+
+    + Headers
+
+            Accept: application/vnd.mason+json
+
++ Response 204
+
++ Response 404
+
+## Item collection [/schedules/{schedule_id}/items/]
+
++ Parameters 
+    
+    + schedule_id (int) - schedules unique id
+
+
+### Get items [GET]
+
+Get all schedules items
+
++ Request
+    
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 200
+
+    + Body
+        
+            {
+                "@controls":{
+                    "self":{
+                        "href":"/schedules/{schedule_id}/items/"
+                    },
+                    "items":[
+                        {
+                            "id":123,
+                            "@controls":{
+                                "self":{
+                                    "href":"/schedules/123/items/"
+                            }
+                        }
+                    ]
+                }
+            }
+            
++ Response 404
+
+### Create item [POST]
+
+Add a new item into a schedule
+
++ Request
+
+    + Headers
+    
+            Accept: application/vnd.mason+json
+    
+    + Body
+    
+            {
+                "name": "item_name",
+                "value": "15.0"
+            }
+            
++ Response 201
+    
+    + Headers
+    
+            Location: /schedules/123/items/1/
+
++ Response 404
+
+## Item [/schedules/{schedule_id}/items/{item_id}/]
+
++ Parameters 
+    
+    + schedule_id (int) - schedules unique id
+    + item_id (int) - unique item id
+
+### Get item information [GET]
+
++ Request
+    
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 200
+
+    + Body
+
+            {
+                "@namespaces":{
+                    "diary":{
+                        "name":"/diary/link-relations#"
+                    }
+                },
+                "name":"item_name",
+                "value":"item_value",
+                "@controls": {
+                    "self":{
+                        "href": "/schedules/123/items/1/"
+                    },
+                    "collection":{
+                        "href":"/schedules/123/items/"
+                    },
+                    "edit":{
+                        "method":"PUT",
+                        "encoding":"json",
+                        "href":"/schedules/123/items/1/",
+                        "schema":{
+                            "type":"object",
+                            "properties":{
+                                "name":{
+                                    "description":"Item name",
+                                    "type":"string"
+                                },
+                                "value":{
+                                    "description":"Item value",
+                                    "type":"string"
+                                }
+                            }
+                        },
+                        "required":["name", "value"]
+                    },
+                    "diary:delete":{
+                        "method":"DELETE",
+                        "href":"/schedules/123/items/1"
+                    }
+                }
+            }
+
++ Response 404
+
+### Modify item [PUT]
+
++ Relation: edit
++ Request (application/json)
+
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
+    + Body
+    
+            {
+                "name": "item_name",
+                "value": "item_value"
+            }
+        
++ Response 204
+
++ Response 400
+
+    The client is trying to send a JSON document that doesn't validate against the schema
+    
+    + Body
+
++ Response 415
+
+    The client sent a request with the wrong content type or the request body was not valid JSON.
+    
+    + Body
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to retrieve an item that doesn't exist.
+    
+    + Body
+
+### Delete item [DELETE]
+
++ Relation: delete
++ Request
+
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 204
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to delete an item that doesn't exist (due to non-existent schedule or item).
+
+    + Body
+
+## Task collection [/schedules/{schedule_id}/tasks/]
+
++ Parameters 
+    
+    + schedule_id (int) - schedules unique id
+
+### Get tasks [GET]
+
+Get all schedules tasks
+
++ Request
+    
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 200
+
+    + Body
+
+            {
+                "@namespaces":{
+                    "diary":{
+                        "name":"/diary/link-relations#"
+                    }
+                },
+                "@controls":{
+                    "self":{
+                        "href": "/schedules/123/tasks/"
+                    },
+                    "diary:add-task":{
+                        "method":"POST",
+                        "encoding":"json",
+                        "href":"/schedules/123/tasks/1/",
+                        "schema":{
+                            "type":"object",
+                            "properties":{
+                                "name":{
+                                    "description":"Task name",
+                                    "type":"string"
+                                },
+                                "priority":{
+                                    "description":"Task priority",
+                                    "type":"int"
+                                },
+                                "goal":{
+                                    "description":"Task goal",
+                                    "type":"string"
+                                },
+                                "result":{
+                                    "description":"Task result",
+                                    "type":"string"
+                                }
+                            }
+                        },
+                        "required":["name", "priority"]
+                    },
+                }
+                "items":[
+                    {
+                        "id": 1,
+                        "name": "task_name",
+                        "priority": 1,
+                        "goal": "task_goal",
+                        "result": "task_result",
+                        "@controls": {
+                            "self": {
+                                "href":"/schedules/123/tasks/1/"
+                            }
+                        }
+                    }
+                ]
+            }
+
++ Response 404
+
+### Add new task [POST]
+
++ Relation: add-task
++ Request (application/json)
+
+    + Headers
+    
+            Accept: application/vnd.mason+json
+        
+    + Body
+
+            {
+                "name": "task_name",
+                "priority": 1,
+                "goal": "task_goal",
+                "result": "task_result"
+            }
+
++ Response 204
+
++ Response 201
+
+    + Headers
+        
+            Location: /schedules/123/tasks/1/
+
++ Response 400
+
+    The client is trying to send a JSON document that doesn't validate against the schema
+    
+    + Body
+
++ Response 415
+
+    The client sent a request with the wrong content type or the request body was not valid JSON.
+    
+    + Body
+
+## Task [/schedules/{schedule_id}/tasks/{task_id}/]
+
++ Parameters
+    
+    + schedule_id (int) - schedules unique id
+    + task_id (int) - unique task id
+
+
+### Get task information [GET]
+
++ Request
+    
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 200
+
+    + Body
+
+            {
+                "@namespaces":{
+                    "diary":{
+                        "name":"/diary/link-relations#"
+                    }
+                },
+                "id": 1,
+                "name": "task_name",
+                "priority": 1,
+                "goal": "task_goal",
+                "result": "task_result",
+                "@controls": {
+                    "self":{
+                        "href": "/schedules/123/tasks/1/"
+                    },
+                    "collection":{
+                        "href":"/schedules/123/tasks/"
+                    },
+                    "edit":{
+                        "method":"PUT",
+                        "encoding":"json",
+                        "href":"/schedules/123/tasks/1/",
+                        "schema":{
+                            "type":"object",
+                            "properties":{
+                                "name":{
+                                    "description":"Task name",
+                                    "type":"string"
+                                },
+                                "priority":{
+                                    "description":"Task priority",
+                                    "type":"int"
+                                },
+                                "goal":{
+                                    "description":"Task goal",
+                                    "type":"string"
+                                },
+                                "result":{
+                                    "description":"Task result",
+                                    "type":"string"
+                                }
+                            }
+                        },
+                        "required":["name", "priority"]
+                    },
+                    "diary:delete":{
+                        "method":"DELETE",
+                        "href":"/schedules/123/tasks/1/"
+                    }
+                }
+            }
+
++ Response 404
+
+### Modify task [PUT]
+
++ Relation: edit
++ Request (application/json)
+
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
+    + Body
+
+            {
+                "name": "task_name",
+                "priority": 1,
+                "goal": "task_goal",
+                "result": "task_result"
+            }
+        
++ Response 204
+
++ Response 400
+
+    The client is trying to send a JSON document that doesn't validate against the schema
+    
+    + Body
+
++ Response 415
+
+    The client sent a request with the wrong content type or the request body was not valid JSON.
+    
+    + Body
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to retrieve a task that doesn't exist.
+    
+    + Body
+
+### Delete task [DELETE]
+
++ Relation: delete
++ Request
+
+    + Headers
+        
+            Accept: application/vnd.mason+json
+        
++ Response 204
+
++ Response 404 (application/vnd.mason+json)
+
+    The client is trying to delete a task that doesn't exist (due to non-existent schedule or task).
+
+    + Body
