@@ -159,7 +159,6 @@ Deletes the associated resource
                     }
                 },
                 "id": 123
-                "repeat_of":1
                 "start_time": "2014-12-03",
                 "end_time": "2014-13-03",
                 "@controls": {
@@ -196,29 +195,18 @@ Deletes the associated resource
                 "items":[
                     {
                      "@controls":{
-                            "@controls":{
-                                "self":{
-                                    "href":"/schedules/123/events/"
-                                }
-                            }
-                        },
+                        "event":{
+                            "href":"/schedules/123/events/"
+                            },
                         "item":{
-                            "@controls":{
-                                "self":{
-                                    "href":"/schedules/123/items/"
-                                }
-                            }
-                        },
+                                "href":"/schedules/123/items/"
+                            },
                         "task":{
-                            "@controls":{
-                                "self":{
-                                    "href":"/schedules/123/tasks/"
-                                }
+                            "href":"/schedules/123/tasks/"
                             }
                         }
                     }
                 ]
-            }
 
 + Response 404
 
