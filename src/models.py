@@ -1,10 +1,49 @@
 from src.app import app, db
 
-class RepeatSchedule(db.Model):
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    interval_days = db.Column(db.Integer, default=0)
-    count = db.Column(db.Integer, default=1)
-    schedule = db.relationship("Schedule", back_populates="repeat_schedule")
+
+
+ScheduleEvent = db.Table(
+    'ScheduleEvent',
+    db.Column(
+        'schedule_id',
+        db.ForeignKey('schedule.id'),
+        primary_key=True,
+        ),
+    db.Column(
+        'event_id',
+        db.ForeignKey('event.id'),
+        primary_key=True
+        )
+    )
+
+ScheduleItem = db.Table(
+    'ScheduleItem',
+    db.Column(
+        'schedule_id',
+        db.ForeignKey('schedule.id'),
+        primary_key=True,
+        ),
+    db.Column(
+        'item_id',
+        db.ForeignKey('item.id'),
+        primary_key=True
+        )
+    )
+
+ScheduleTask = db.Table(
+    'ScheduleTask',
+    db.Column(
+        'schedule_id',
+        db.ForeignKey('schedule.id'),
+        primary_key=True,
+        ),
+    db.Column(
+        'task_id',
+        db.ForeignKey('task.id'),
+        primary_key=True
+        )
+    )
+
 
 class Schedule(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -18,47 +57,6 @@ class Schedule(db.Model):
     schedule_tasks = db.relationship("ScheduleTask", back_populates="schedule", cascade="delete, delete-orphan")
     schedule_items = db.relationship("ScheduleItem", back_populates="schedule", cascade="delete, delete-orphan")
 
-class ScheduleEvent(db.Model):
-    __table_args__ = (
-        db.PrimaryKeyConstraint('schedule_id', 'event_id'),
-    )
-    schedule_id = db.Column(
-        db.ForeignKey('schedule.id'), nullable=False)
-    event_id = db.Column(
-        db.ForeignKey('event.id'), nullable=False)
-
-    schedule = db.relationship(
-        'Schedule', back_populates='schedule_events')
-    event = db.relationship(
-        'Event', back_populates='schedule_event')
-
-class ScheduleTask(db.Model):
-    __table_args__ = (
-        db.PrimaryKeyConstraint('schedule_id', 'task_id'),
-    )
-    schedule_id = db.Column(
-        db.ForeignKey('schedule.id'), nullable=False)
-    task_id = db.Column(
-        db.ForeignKey('task.id'), nullable=False)
-
-    schedule = db.relationship(
-            'Schedule', back_populates='schedule_tasks')
-    task = db.relationship(
-            'Task', back_populates='schedule_task')
-
-class ScheduleItem(db.Model):
-    __table_args__ = (
-        db.PrimaryKeyConstraint('schedule_id', 'item_id'),
-    )
-    schedule_id = db.Column(
-        db.ForeignKey('schedule.id'), nullable=False)
-    item_id = db.Column(
-        db.ForeignKey('item.id'), nullable=False)
-
-    schedule = db.relationship(
-            'Schedule', back_populates='schedule_items')
-    item = db.relationship(
-            'Item', back_populates='schedule_item')
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
