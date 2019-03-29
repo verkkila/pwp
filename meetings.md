@@ -43,16 +43,27 @@ Foreign key tests should be implemented.
 *ONLY USED BY COURSE STAFF: Additional comments from the course staff*
 
 ## Meeting 3.
-* **DATE:**
-* **ASSISTANTS:**
+* **DATE:** 29.03.2019
+* **ASSISTANTS:** Ivan Sanchez
 * **GRADE:** *To be filled by course staff*
 
 ### Minutes
+We have too many resources (10), so we will remove RepeatSchedules and RepeatSchedule to simplify.
+Entry relation (all-schedules) should be marked into the diagram.
+Allow moving between events, items and tasks instead of having to move through schedules.
+Update the REST conformance section to include examples of each case.
+Resource state diagram should be updated to include all the link relations and the previously mentioned relations between events, items and tasks. In addition, names should be double-checked to match the documentation.
+Apiary document is lacking profiles which should be added and contain the documentation of each data member. Profiles should be included in HTTP responses too.
+Error responses should include error messages.
+Add namespaces to link relations.
 *Summary of what was discussed during the meeting*
 
 ### Action points
-*List here the actions points discussed with assistants*
-
+* Update documentation
+	- Add and update relations
+	- Profiles
+	- Error responses
+	- Namespaces
 
 ### Comments from staff
 *ONLY USED BY COURSE STAFF: Additional comments from the course staff*
