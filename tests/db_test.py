@@ -10,7 +10,7 @@ from sqlalchemy import event
 sys.path.append("../")
 
 from src.app import app, db
-from src.models import Schedule, RepeatSchedule, ScheduleEvent, ScheduleTask, ScheduleItem, Event, Task, Item
+from src.models import Schedule, ScheduleEvent, ScheduleTask, ScheduleItem, Event, Task, Item
 
 
 @event.listens_for(Engine, "connect")
