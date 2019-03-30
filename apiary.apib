@@ -19,13 +19,18 @@ This is a control that is used to add a new item
 
 This is a control that is used to add a new task
 
+## add-event
+    
+This is a control that is used to add a new event
+
+
 ## all-schedules
 
 This is a control that is used to list all schedules
 
 ## events-in
 
-This is a control that is used to access all events in schedule
+This is a control that is used to access all events in schedule-evet
 
 ## items-in
 
@@ -65,6 +70,9 @@ Deletes the associated resource
                     "self":{
                         "href": "/schedules/"
                     },
+                    "profile":{
+                        "href":"/profile/schedule/"
+                    }
                     "diary:add-schedule":{
                         "method":"POST",
                         "encoding":"json",
@@ -79,14 +87,6 @@ Deletes the associated resource
                                 "end_time":{
                                     "description":"End time",
                                     "type":"datetime",
-                                },
-                                "count":{
-                                    "description":"Recurring count",
-                                    "type":"int"
-                                },
-                                "interval_days":{
-                                    "description":"Recurring interval",
-                                    "type":"int"
                                 }
                             }
                         },
@@ -105,8 +105,6 @@ Deletes the associated resource
                         }
                     }
                 ]
-            
-+ Response 404
 
 ### Create schedule [POST]
 
@@ -124,15 +122,56 @@ Deletes the associated resource
             {
                 "start_time": "2014-12-03",
                 "end_time": "2014-13-03",
-                "interval_days":0,
-                "count":1
             }
             
 + Response 201
     
     + Headers
 
-            Location: /schedules/123/ 
+            Location: /schedules/ 
+
++ Response 400 (application/vnd.mason+json)
+    
+    The client sends bad JSON
+        
+    + Body
+    
+            {
+                "resource_url":"/schedules/",
+                "@error":{
+                    "@message":"Invalid JSON payload",
+                    "@messages":[
+                        ""
+                    ]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
+
++ Response 409 (application/vnd.mason+json)
+    
+    Already exists
+        
+    + Body
+    
+            {
+                "resource_url":"/schedules/",
+                "@error":{
+                    "@message":"Schedule already exists",
+                    "@messages":[
+                        ""
+                    ]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
+    
 
 ## Schedule [/schedules/{schedule_id}/]
 
@@ -168,6 +207,9 @@ Deletes the associated resource
                     "collection":{
                         "href":"/schedules/"
                     },
+                    "profile":{
+                        "href":"/profiles/schedule/"
+                    }
                     "edit":{
                         "method":"PUT",
                         "encoding":"json",
@@ -196,19 +238,19 @@ Deletes the associated resource
                     {
                      "@controls":{
                         "event":{
-                            "href":"/schedules/123/events/"
+                                "href":"/schedules/123/events/"
                             },
                         "item":{
                                 "href":"/schedules/123/items/"
                             },
                         "task":{
-                            "href":"/schedules/123/tasks/"
+                                "href":"/schedules/123/tasks/"
                             }
                         }
                     }
                 ]
 
-+ Response 404
++ Response 404 
 
 ### Delete schedule [DELETE]
 
@@ -222,7 +264,25 @@ Deletes the associated resource
 
 + Response 204
 
-+ Response 404
++ Response 404 (application/vnd.mason+json)
+
+    Not found
+    
+    + Body 
+    
+            {
+                "resource_url":"/schedules/123/",
+                "@error":{
+                    "@message":"Not found",
+                    "@messages":[null]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
+
 
 
 ### Edit schedule [PUT]
@@ -242,7 +302,68 @@ Deletes the associated resource
                 "end_time": "2014-13-03"
             }
 
-+ Response 204
++ Response 204 
+
++ Response 404 (application/vnd.mason+json)
+
+    Not found
+    
+    + Body 
+    
+            {
+                "resource_url":"/schedules/123/",
+                "@error":{
+                    "@message":"Not found",
+                    "@messages":[null]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
+
++ Response 409 (application/vnd.mason+json)
+    
+    Already exists
+        
+    + Body
+    
+            {
+                "resource_url":"/schedules/123/",
+                "@error":{
+                    "@message":"Schedule already exists",
+                    "@messages":[
+                        ""
+                    ]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
+
++ Response 400 (application/vnd.mason+json)
+    
+    The client sends bad JSON payload
+        
+    + Body
+    
+            {
+                "resource_url":"/schedules/",
+                "@error":{
+                    "@message":"Invalid JSON payload",
+                    "@messages":[
+                        ""
+                    ]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
 
 ## Event collection [/schedules/{schedule_id}/events]
 
@@ -265,19 +386,62 @@ Get all events of one schedule
     + Body
         
             {
+                "@namespaces":{
+                    "diary":{
+                        "name":"/diary/link-relations#"
+                        },
                 "@controls":{
                     "self":{
-                        "href":"/schedules/{schedule_id}/events/"
+                        "href":"/schedules/123/events/"
+                    },
+                    "profile":{
+                        "href":"/profiles/event/"
+                    }
+                    "collection":{
+                        "href":"/schedules/123/"
+                    },
+                    "diary:add-event":{
+                        "method":"POST",
+                        "encoding":"json",
+                        "href":"/schedules/123/tasks/1/",
+                        "schema":{
+                            "type":"object",
+                            "properties":{
+                                "name":{
+                                    "description":"event name",
+                                    "type":"string"
+                                },
+                                "duration":{
+                                    "description":"event duration",
+                                    "type":"integer"
+                                },
+                                "note":{
+                                    "description":"event note",
+                                    "type":"string"
+                                },
+                            }
+                        },
+                        "required":["name", "duration"]
+                    },
+                    "diary:items-in":{
+                        "href":"/schedules/123/items/
+                    },
+                    "diary":tasks-in:{
+                        "href":"/schedules/123/tasks/"
                     },
                     "items":[
                         {
-                            "id":123,
+                            "id":1,
+                            "name":"event name",
+                            "duration":3,
+                            "note": "new note",
                             "@controls":{
                                 "self":{
-                                    "href":"/schedules/123/events/"
+                                    "href":"/schedules/123/events/1/"
+                                }
                             }
                         }
-                    ]
+                    ]   
                 }
             }
 
@@ -296,7 +460,7 @@ Add a new event into a schedule
     + Body
     
             {
-                "name": "event_name",
+                "name": event_name",
                 "duration": 2,
                 "note": "example note"
             }
@@ -307,7 +471,65 @@ Add a new event into a schedule
         
             Location: /schedules/123/events/1/
 
-+ Response 404
++ Response 404 (application/vnd.mason+json)
+
+    Not found
+    
+    + Body 
+    
+            {
+                "resource_url":"/schedules/123/events/",
+                "@error":{
+                    "@message":"Not found",
+                    "@messages":[null]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
++ Response 409 (application/vnd.mason+json)
+    
+    Already exists
+        
+    + Body
+    
+            {
+                "resource_url":"/schedules/123/events/",
+                "@error":{
+                    "@message":"event already exists",
+                    "@messages":[
+                        ""
+                    ]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
++ Response 400 (application/vnd.mason+json)
+    
+    Bad json payload
+    
+    + Body
+    
+            {
+                "resource_url":"/schedules/123/events/",
+                "@error":{
+                    "@message":"Bad json payload",
+                    "@messages":[
+                        ""
+                    ]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
+
 
 
 ## Event [/schedules/{schedule_id}/events/{event_id}]
@@ -330,9 +552,53 @@ Add a new event into a schedule
     + Body
         
             {
+                "name":"event name",
+                "duration": 3,
+                "note":"new note",
+                "@controls":{
+                    "self":{
+                        "href":"/schedule/123/events/1/"
+                    },
+                    "profile":{
+                        "href": "/profiles/event"
+                    },
+                    "collection":{
+                        "href":"/schedule/123/events/"
+                    },
+                    "edit":{
+                        "href":"/schedule/123/events/1/",
+                        "title":"Edit",
+                        "encoding":"json",
+                        "method":"PUT",
+                        "schema":{
+                            "type":"object",
+                            "properties":{
+                                "name":{
+                                    "description":"event name",
+                                    "type":"string",
+                                },
+                                "duration":{
+                                    "description":"event duration",
+                                    "type":"integer",
+                                },
+                                "note":{
+                                    "description":"event note",
+                                    "type":"string",
+                                },
+                            },
+                            "required":["name", "duration"]
+                        }
+                    },
+                    "diary:delete"{
+                        "href":"/schedule/123/events/1/",
+                        "method":"DELETE"
+                    }
+                },
             }
 
 + Response 404
+
+
 
 ### Update event [PATCH]
 
@@ -354,6 +620,73 @@ Add a new event into a schedule
 
 + Response 204
 
+    + Headers
+        
+            Location: /schedules/123/events/1/
+            
+            
++ Response 404 (application/vnd.mason+json)
+
+    Not found
+    
+    + Body 
+    
+            {
+                "resource_url":"/schedules/123/events/1/",
+                "@error":{
+                    "@message":"Not found",
+                    "@messages":[null]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
++ Response 409 (application/vnd.mason+json)
+    
+    Already exists
+        
+    + Body
+    
+            {
+                "resource_url":"/schedules/123/events/1/",
+                "@error":{
+                    "@message":"event already exists",
+                    "@messages":[
+                        ""
+                    ]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
+            
++ Response 400 (application/vnd.mason+json)
+    
+    Bad json payload
+    
+    + Body
+    
+            {
+                "resource_url":"/schedules/123/events/1/",
+                "@error":{
+                    "@message":"Bad json payload",
+                    "@messages":[
+                        ""
+                    ]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
+
+
+
 ### Delete event [DELETE]
 
 + Relation: delete
@@ -366,7 +699,47 @@ Add a new event into a schedule
 
 + Response 204
 
-+ Response 404
++ Response 404 (application/vnd.mason+json)
+
+    Not found
+    
+    + Body 
+    
+            {
+                "resource_url":"/schedules/123/events/1/",
+                "@error":{
+                    "@message":"Not found",
+                    "@messages":[null]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
+            
++ Response 400 (application/vnd.mason+json)
+    
+    Bad json payload
+    
+    + Body
+    
+            {
+                "resource_url":"/schedules/123/events/1/",
+                "@error":{
+                    "@message":"Bad json payload",
+                    "@messages":[
+                        ""
+                    ]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
+
+
 
 ## Item collection [/schedules/{schedule_id}/items/]
 
@@ -390,16 +763,54 @@ Get all schedules items
     + Body
         
             {
+               "@namespaces":{
+                    "diary":{
+                        "name":"/diary/link-relations#"
+                        },
                 "@controls":{
                     "self":{
-                        "href":"/schedules/{schedule_id}/items/"
+                        "href":"/schedules/123/items/"
+                    },
+                    "collection":{
+                        "href":"/schedules/123/"
+                    },
+                    "profile":{
+                        "href":"/profiles/item/"
+                    }
+                    "diary:add-item": {
+                        "method":"POST",
+                        "encoding":"json",
+                        "href":"/schedules/123/items/1/",
+                        "schema":{
+                            "type":"object",
+                            "properties":{
+                                "name":{
+                                    "description":"item name",
+                                    "type":"string"
+                                },
+                                "value":{
+                                    "description":"item  value",
+                                    "type":"number"
+                                },
+                            }
+                        },
+                        "required":["name", "value"]
+                    },
+                    "diary:events-in":{
+                        "href":"/schedules/123/events/
+                    },
+                    "diary":tasks-in:{
+                        "href":"/schedules/123/tasks/"
                     },
                     "items":[
                         {
-                            "id":123,
+                            "id":1,
+                            "name":"item name",
+                            "value":"item value"
                             "@controls":{
                                 "self":{
-                                    "href":"/schedules/123/items/"
+                                    "href":"/schedules/123/items/1/"
+                                }
                             }
                         }
                     ]
@@ -459,7 +870,7 @@ Add a new item into a schedule
                     }
                 },
                 "name":"item_name",
-                "value":"item_value",
+                "value":15.0,
                 "@controls": {
                     "self":{
                         "href": "/schedules/123/items/1/"
@@ -480,11 +891,14 @@ Add a new item into a schedule
                                 },
                                 "value":{
                                     "description":"Item value",
-                                    "type":"string"
+                                    "type":"number"
                                 }
                             }
                         },
                         "required":["name", "value"]
+                    },
+                    "diary:add-item":{
+                        "method":"POST",
                     },
                     "diary:delete":{
                         "method":"DELETE",
@@ -508,28 +922,71 @@ Add a new item into a schedule
     
             {
                 "name": "item_name",
-                "value": "item_value"
+                "value": 15.0
             }
         
 + Response 204
 
-+ Response 400
-
-    The client is trying to send a JSON document that doesn't validate against the schema
-    
-    + Body
-
-+ Response 415
-
-    The client sent a request with the wrong content type or the request body was not valid JSON.
-    
-    + Body
-
 + Response 404 (application/vnd.mason+json)
 
-    The client is trying to retrieve an item that doesn't exist.
+    Not found
+    
+    + Body 
+    
+            {
+                "resource_url":"/schedules/123/items/1/",
+                "@error":{
+                    "@message":"Not found",
+                    "@messages":[null]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
++ Response 409 (application/vnd.mason+json)
+    
+    Already exists
+        
+    + Body
+    
+            {
+                "resource_url":"/schedules/123/items/1/",
+                "@error":{
+                    "@message":"item already exists",
+                    "@messages":[
+                        ""
+                    ]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
+            
++ Response 400 (application/vnd.mason+json)
+    
+    Bad json payload
     
     + Body
+    
+            {
+                "resource_url":"/schedules/123/items/1/",
+                "@error":{
+                    "@message":"Bad json payload",
+                    "@messages":[
+                        ""
+                    ]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
+
 
 ### Delete item [DELETE]
 
@@ -544,9 +1001,43 @@ Add a new item into a schedule
 
 + Response 404 (application/vnd.mason+json)
 
-    The client is trying to delete an item that doesn't exist (due to non-existent schedule or item).
+    Not found
+    
+    + Body 
+    
+            {
+                "resource_url":"/schedules/123/items/1/",
+                "@error":{
+                    "@message":"Not found",
+                    "@messages":[null]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
 
++ Response 400 (application/vnd.mason+json)
+    
+    Bad json payload
+    
     + Body
+    
+            {
+                "resource_url":"/schedules/123/items/1/",
+                "@error":{
+                    "@message":"Bad json payload",
+                    "@messages":[
+                        ""
+                    ]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
 
 ## Task collection [/schedules/{schedule_id}/tasks/]
 
@@ -605,7 +1096,7 @@ Get all schedules tasks
                         },
                         "required":["name", "priority"]
                     },
-                }
+
                 "items":[
                     {
                         "id": 1,
@@ -642,7 +1133,6 @@ Get all schedules tasks
                 "result": "task_result"
             }
 
-+ Response 204
 
 + Response 201
 
@@ -650,17 +1140,66 @@ Get all schedules tasks
         
             Location: /schedules/123/tasks/1/
 
-+ Response 400
 
-    The client is trying to send a JSON document that doesn't validate against the schema
++ Response 404 (application/vnd.mason+json)
+
+    Not found
+    
+    + Body 
+    
+            {
+                "resource_url":"/schedules/123/tasks/",
+                "@error":{
+                    "@message":"Not found",
+                    "@messages":[null]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
+
++ Response 409 (application/vnd.mason+json)
+    
+    Already exists
+        
+    + Body
+    
+            {
+                "resource_url":"/schedules/123/tasks/",
+                "@error":{
+                    "@message":"task already exists",
+                    "@messages":[
+                        ""
+                    ]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
++ Response 400 (application/vnd.mason+json)
+    
+    Bad json payload
     
     + Body
-
-+ Response 415
-
-    The client sent a request with the wrong content type or the request body was not valid JSON.
     
-    + Body
+            {
+                "resource_url":"/schedules/123/tasks/",
+                "@error":{
+                    "@message":"Bad json payload",
+                    "@messages":[
+                        ""
+                    ]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
 
 ## Task [/schedules/{schedule_id}/tasks/{task_id}/]
 
@@ -756,23 +1295,67 @@ Get all schedules tasks
         
 + Response 204
 
-+ Response 400
-
-    The client is trying to send a JSON document that doesn't validate against the schema
-    
-    + Body
-
-+ Response 415
-
-    The client sent a request with the wrong content type or the request body was not valid JSON.
-    
-    + Body
-
 + Response 404 (application/vnd.mason+json)
 
-    The client is trying to retrieve a task that doesn't exist.
+    Not found
+    
+    + Body 
+    
+            {
+                "resource_url":"/schedules/123/tasks/",
+                "@error":{
+                    "@message":"Not found",
+                    "@messages":[null]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
+
++ Response 409 (application/vnd.mason+json)
+    
+    Already exists
+        
+    + Body
+    
+            {
+                "resource_url":"/schedules/123/tasks/",
+                "@error":{
+                    "@message":"task already exists",
+                    "@messages":[
+                        ""
+                    ]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
+            
++ Response 400 (application/vnd.mason+json)
+    
+    Bad json payload
     
     + Body
+    
+            {
+                "resource_url":"/schedules/123/tasks/",
+                "@error":{
+                    "@message":"Bad json payload",
+                    "@messages":[
+                        ""
+                    ]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
+
 
 ### Delete task [DELETE]
 
@@ -787,6 +1370,61 @@ Get all schedules tasks
 
 + Response 404 (application/vnd.mason+json)
 
-    The client is trying to delete a task that doesn't exist (due to non-existent schedule or task).
+    Not found
+    
+    + Body 
+    
+            {
+                "resource_url":"/schedules/123/tasks/",
+                "@error":{
+                    "@message":"Not found",
+                    "@messages":[null]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
 
++ Response 409 (application/vnd.mason+json)
+    
+    Already exists
+        
     + Body
+    
+            {
+                "resource_url":"/schedules/123/tasks/",
+                "@error":{
+                    "@message":"task already exists",
+                    "@messages":[
+                        ""
+                    ]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
+            
++ Response 400 (application/vnd.mason+json)
+    
+    Bad json payload
+    
+    + Body
+    
+            {
+                "resource_url":"/schedules/123/tasks/",
+                "@error":{
+                    "@message":"Bad json payload",
+                    "@messages":[
+                        ""
+                    ]
+                },
+                "@controls":{
+                    "profile":{
+                        "href":"/profiles/error/"
+                    }
+                }
+            }
