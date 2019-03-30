@@ -60,51 +60,53 @@ Deletes the associated resource
 
     + Body
 
-            {
-                "@namespaces":{
-                    "diary":{
-                        "name":/diary/link-relations#"
-                    }
-                },
-                "@controls":{
-                    "self":{
-                        "href": "/schedules/"
+                {
+                    "@namespaces":{
+                        "diary":{
+                            "name":"/diary/link-relations#"
+                        }
                     },
-                    "profile":{
-                        "href":"/profile/schedule/"
-                    }
-                    "diary:add-schedule":{
-                        "method":"POST",
-                        "encoding":"json",
-                        "href":"/schedules/123/"
-                        "schema":{
-                            "type":"object",
-                            "properties":{
-                                "start_time":{
-                                    "description":"Start time",
-                                    "type":"datetime",
-                                },
-                                "end_time":{
-                                    "description":"End time",
-                                    "type":"datetime",
+                    "@controls":{
+                        "self":{
+                            "href": "/schedules/"
+                        },
+                        "profile":{
+                            "href":"/profile/schedule/"
+                        },
+                        "diary:add-schedule":{
+                            "method":"POST",
+                            "encoding":"json",
+                            "href":"/schedules/123/",
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "start_time":{
+                                        "description":"Start time",
+                                        "type":"datetime",
+                                    },
+                                    "end_time":{
+                                        "description":"End time",
+                                        "type":"datetime",
+                                    }
+                                }
+                            },
+                            "required":["start_time", "end_time"]
+                        }
+                    },
+                    "items":[
+                        {
+                            "id": 123
+                            "start_time": "2014-12-03",
+                            "end_time": "2014-13-03",
+                            "@controls": {
+                                "self": {
+                                    "href":"/schedules/123/"
                                 }
                             }
-                        },
-                        "required":["start_time", "end_time"]
-                    },
-                },
-                "items":[
-                    {
-                        "id": 123
-                        "start_time": "2014-12-03",
-                        "end_time": "2014-13-03",
-                        "@controls": {
-                            "self": {
-                                "href":"/schedules/123/"
-                            }
                         }
-                    }
-                ]
+                    ]
+                }
+        
 
 ### Create schedule [POST]
 
@@ -118,11 +120,11 @@ Deletes the associated resource
             Accept: application/vnd.mason+json
     
     + Body
-        
-            {
-                "start_time": "2014-12-03",
-                "end_time": "2014-13-03",
-            }
+
+                {
+                    "start_time": "2014-12-03",
+                    "end_time": "2014-13-03"
+                }
             
 + Response 201
     
@@ -131,32 +133,28 @@ Deletes the associated resource
             Location: /schedules/ 
 
 + Response 400 (application/vnd.mason+json)
-    
-    The client sends bad JSON
-        
+
     + Body
-    
-            {
-                "resource_url":"/schedules/",
-                "@error":{
-                    "@message":"Invalid JSON payload",
-                    "@messages":[
-                        ""
-                    ]
-                },
-                "@controls":{
-                    "profile":{
-                        "href":"/profiles/error/"
+
+                {
+                    "resource_url":"/schedules/",
+                    "@error":{
+                        "@message":"Invalid JSON payload",
+                        "@messages":[
+                            ""
+                        ]
+                    },
+                    "@controls":{
+                        "profile":{
+                            "href":"/profiles/error/"
+                        }
                     }
                 }
-            }
 
 + Response 409 (application/vnd.mason+json)
-    
-    Already exists
-        
+
     + Body
-    
+
             {
                 "resource_url":"/schedules/",
                 "@error":{
@@ -190,14 +188,14 @@ Deletes the associated resource
 + Response 200
 
     + Body
-        
+
             {
                 "@namespaces":{
                     "diary":{
                         "name":/diary/link-relations#"
                     }
                 },
-                "id": 123
+                "id": 123,
                 "start_time": "2014-12-03",
                 "end_time": "2014-13-03",
                 "@controls": {
@@ -209,7 +207,7 @@ Deletes the associated resource
                     },
                     "profile":{
                         "href":"/profiles/schedule/"
-                    }
+                    },
                     "edit":{
                         "method":"PUT",
                         "encoding":"json",
@@ -230,7 +228,7 @@ Deletes the associated resource
                         "required":["start_time", "end_time"]
                     },
                     "diary:delete":{
-                        "method":"DELETE"
+                        "method":"DELETE",
                         "href":"/schedules/123/"
                     }
                 },
@@ -249,6 +247,7 @@ Deletes the associated resource
                         }
                     }
                 ]
+            }
 
 + Response 404 
 
@@ -269,7 +268,7 @@ Deletes the associated resource
     Not found
     
     + Body 
-    
+
             {
                 "resource_url":"/schedules/123/",
                 "@error":{
@@ -296,7 +295,7 @@ Deletes the associated resource
             Accept: application/vnd.mason+json
     
     + Body
-        
+
             {
                 "start_time": "2014-12-03",
                 "end_time": "2014-13-03"
@@ -309,7 +308,7 @@ Deletes the associated resource
     Not found
     
     + Body 
-    
+
             {
                 "resource_url":"/schedules/123/",
                 "@error":{
@@ -324,11 +323,9 @@ Deletes the associated resource
             }
 
 + Response 409 (application/vnd.mason+json)
-    
-    Already exists
-        
+
     + Body
-    
+
             {
                 "resource_url":"/schedules/123/",
                 "@error":{
@@ -347,9 +344,9 @@ Deletes the associated resource
 + Response 400 (application/vnd.mason+json)
     
     The client sends bad JSON payload
-        
+
     + Body
-    
+
             {
                 "resource_url":"/schedules/",
                 "@error":{
@@ -384,12 +381,13 @@ Get all events of one schedule
 + Response 200
 
     + Body
-        
+
             {
                 "@namespaces":{
                     "diary":{
                         "name":"/diary/link-relations#"
-                        },
+                    }
+                },
                 "@controls":{
                     "self":{
                         "href":"/schedules/123/events/"
@@ -458,7 +456,7 @@ Add a new event into a schedule
             Accept: application/vnd.mason+json
 
     + Body
-    
+
             {
                 "name": event_name",
                 "duration": 2,
@@ -474,9 +472,9 @@ Add a new event into a schedule
 + Response 404 (application/vnd.mason+json)
 
     Not found
-    
+
     + Body 
-    
+
             {
                 "resource_url":"/schedules/123/events/",
                 "@error":{
@@ -492,9 +490,9 @@ Add a new event into a schedule
 + Response 409 (application/vnd.mason+json)
     
     Already exists
-        
+
     + Body
-    
+
             {
                 "resource_url":"/schedules/123/events/",
                 "@error":{
@@ -512,9 +510,9 @@ Add a new event into a schedule
 + Response 400 (application/vnd.mason+json)
     
     Bad json payload
-    
+
     + Body
-    
+
             {
                 "resource_url":"/schedules/123/events/",
                 "@error":{
@@ -550,7 +548,7 @@ Add a new event into a schedule
 + Response 200
 
     + Body
-        
+
             {
                 "name":"event name",
                 "duration": 3,
@@ -630,7 +628,7 @@ Add a new event into a schedule
     Not found
     
     + Body 
-    
+
             {
                 "resource_url":"/schedules/123/events/1/",
                 "@error":{
@@ -648,7 +646,7 @@ Add a new event into a schedule
     Already exists
         
     + Body
-    
+
             {
                 "resource_url":"/schedules/123/events/1/",
                 "@error":{
@@ -669,7 +667,7 @@ Add a new event into a schedule
     Bad json payload
     
     + Body
-    
+
             {
                 "resource_url":"/schedules/123/events/1/",
                 "@error":{
@@ -704,7 +702,7 @@ Add a new event into a schedule
     Not found
     
     + Body 
-    
+
             {
                 "resource_url":"/schedules/123/events/1/",
                 "@error":{
@@ -723,7 +721,7 @@ Add a new event into a schedule
     Bad json payload
     
     + Body
-    
+
             {
                 "resource_url":"/schedules/123/events/1/",
                 "@error":{
@@ -761,12 +759,14 @@ Get all schedules items
 + Response 200
 
     + Body
-        
+    
+
             {
                "@namespaces":{
                     "diary":{
                         "name":"/diary/link-relations#"
-                        },
+                    }
+                },
                 "@controls":{
                     "self":{
                         "href":"/schedules/123/items/"
@@ -776,7 +776,7 @@ Get all schedules items
                     },
                     "profile":{
                         "href":"/profiles/item/"
-                    }
+                    },
                     "diary:add-item": {
                         "method":"POST",
                         "encoding":"json",
@@ -830,7 +830,7 @@ Add a new item into a schedule
             Accept: application/vnd.mason+json
     
     + Body
-    
+
             {
                 "name": "item_name",
                 "value": "15.0"
@@ -919,7 +919,7 @@ Add a new item into a schedule
             Accept: application/vnd.mason+json
         
     + Body
-    
+
             {
                 "name": "item_name",
                 "value": 15.0
@@ -932,7 +932,7 @@ Add a new item into a schedule
     Not found
     
     + Body 
-    
+
             {
                 "resource_url":"/schedules/123/items/1/",
                 "@error":{
@@ -950,7 +950,7 @@ Add a new item into a schedule
     Already exists
         
     + Body
-    
+
             {
                 "resource_url":"/schedules/123/items/1/",
                 "@error":{
@@ -971,7 +971,7 @@ Add a new item into a schedule
     Bad json payload
     
     + Body
-    
+
             {
                 "resource_url":"/schedules/123/items/1/",
                 "@error":{
@@ -1004,7 +1004,7 @@ Add a new item into a schedule
     Not found
     
     + Body 
-    
+
             {
                 "resource_url":"/schedules/123/items/1/",
                 "@error":{
@@ -1023,7 +1023,7 @@ Add a new item into a schedule
     Bad json payload
     
     + Body
-    
+
             {
                 "resource_url":"/schedules/123/items/1/",
                 "@error":{
@@ -1146,7 +1146,7 @@ Get all schedules tasks
     Not found
     
     + Body 
-    
+
             {
                 "resource_url":"/schedules/123/tasks/",
                 "@error":{
@@ -1163,9 +1163,9 @@ Get all schedules tasks
 + Response 409 (application/vnd.mason+json)
     
     Already exists
-        
+
     + Body
-    
+
             {
                 "resource_url":"/schedules/123/tasks/",
                 "@error":{
@@ -1183,9 +1183,9 @@ Get all schedules tasks
 + Response 400 (application/vnd.mason+json)
     
     Bad json payload
-    
+
     + Body
-    
+
             {
                 "resource_url":"/schedules/123/tasks/",
                 "@error":{
@@ -1300,7 +1300,7 @@ Get all schedules tasks
     Not found
     
     + Body 
-    
+
             {
                 "resource_url":"/schedules/123/tasks/",
                 "@error":{
@@ -1317,9 +1317,9 @@ Get all schedules tasks
 + Response 409 (application/vnd.mason+json)
     
     Already exists
-        
+
     + Body
-    
+
             {
                 "resource_url":"/schedules/123/tasks/",
                 "@error":{
@@ -1338,9 +1338,9 @@ Get all schedules tasks
 + Response 400 (application/vnd.mason+json)
     
     Bad json payload
-    
+
     + Body
-    
+
             {
                 "resource_url":"/schedules/123/tasks/",
                 "@error":{
@@ -1373,7 +1373,7 @@ Get all schedules tasks
     Not found
     
     + Body 
-    
+
             {
                 "resource_url":"/schedules/123/tasks/",
                 "@error":{
@@ -1392,7 +1392,7 @@ Get all schedules tasks
     Already exists
         
     + Body
-    
+
             {
                 "resource_url":"/schedules/123/tasks/",
                 "@error":{
@@ -1411,9 +1411,9 @@ Get all schedules tasks
 + Response 400 (application/vnd.mason+json)
     
     Bad json payload
-    
+
     + Body
-    
+
             {
                 "resource_url":"/schedules/123/tasks/",
                 "@error":{
