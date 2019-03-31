@@ -5,7 +5,7 @@ HOST: http://localhost:5000/
 
 Diary is a API to track daily activities.
 
-# Group link Relations
+# Group Link Relations
 
 ## add-schedule
 
@@ -43,6 +43,130 @@ This is a control that is used to access all tasks in schedule
 ## delete
 
 Deletes the associated resource
+
+# Group Profiles
+
+This section includes resource profiles which provide semantic descriptions for the attributes of each resource, as well as the list of controls (by link relation) available from that resource.
+
+## Error Profile
+
+Profile definition for all errors returned by the API. See [Mason error control](https://github.com/JornWildt/Mason/blob/master/Documentation/Mason-draft-2.md#property-name-error) for more information about errors.
+
++ Attributes
+
+    + resource_url (string, required) - URI of the resource the error was generated from.
+
+## Schedule Profile
+
+Profile definition for all schedule related resources.
+
+### Link Relations
+
+This section lists all possible link relations associated with schedules; not all of them are necessarily present on each resource type. The following link relations from the diary namespace are used:
+
+ * [add-schedule](reference/link-relations/add-scedule)
+ * [delete](reference/link-relations/delete)
+ 
+The following [IANA RFC5988](http://www.iana.org/assignments/link-relations/link-relations.xhtml) link relations are also used:
+
+ * collection
+ * edit
+ * profile
+ * self
+ 
+### Semantic Descriptors
+
+#### Data Type Schedule
+
+ * `start_time`: Starting time for the given schedule.
+ * `end_time`: Ending time for the given schedule.
+
+## Event Profile
+
+Profile definition for all event related resources.
+
+### Link Relations
+
+This section lists all possible link relations associated with events; not all of them are necessarily present on each resource type. The following link relations from the diary namespace are used:
+
+ * [add-event](reference/link-relations/add-event)
+ * [items-in](reference/link-relations/items-in)
+ * [tasks-in](reference/link-relations/tasks-in)
+ * [all-schedules](reference/link-relations/all-schedules)
+ * [delete](reference/link-relations/delete)
+ 
+The following [IANA RFC5988](http://www.iana.org/assignments/link-relations/link-relations.xhtml) link relations are also used:
+
+ * collection
+ * edit
+ * profile
+ * self
+ 
+### Semantic Descriptors
+
+#### Data Type Event
+
+ * `name`: Name of the given event.
+ * `duration`: Duration of the given event.
+ * `note`: A possible note or description for the given event.
+
+## Item Profile
+
+Profile definition for all item related resources.
+
+### Link Relations
+
+This section lists all possible link relations associated with items; not all of them are necessarily present on each resource type. The following link relations from the diary namespace are used:
+
+ * [add-item](reference/link-relations/add-item)
+ * [tasks-in](reference/link-relations/tasks-in)
+ * [events-in](reference/link-relations/events-in)
+ * [all-schedules](reference/link-relations/all-schedules)
+ * [delete](reference/link-relations/delete)
+ 
+The following [IANA RFC5988](http://www.iana.org/assignments/link-relations/link-relations.xhtml) link relations are also used:
+
+ * collection
+ * edit
+ * profile
+ * self
+ 
+### Semantic Descriptors
+
+#### Data Type Item
+
+ * `name`: Name of the given item.
+ * `value`: Value of the given item.
+
+## Task Profile
+
+Profile definition for all task related resources.
+
+### Link Relations
+
+This section lists all possible link relations associated with tasks; not all of them are necessarily present on each resource type. The following link relations from the diary namespace are used:
+
+ * [add-task](reference/link-relations/add-task)
+ * [items-in](reference/link-relations/items-in)
+ * [events-in](reference/link-relations/events-in)
+ * [all-schedules](reference/link-relations/all-schedules)
+ * [delete](reference/link-relations/delete)
+ 
+The following [IANA RFC5988](http://www.iana.org/assignments/link-relations/link-relations.xhtml) link relations are also used:
+
+ * collection
+ * edit
+ * profile
+ * self
+ 
+### Semantic Descriptors
+
+#### Data Type Task
+
+ * `name`: Name of the given task.
+ * `priority`: Priority of the given task.
+ * `goal`: The intended goal for the given task.
+ * `result`: The result of the given task.
 
 ## Schedule collection [/schedules/]
 
@@ -101,6 +225,9 @@ Deletes the associated resource
                             "@controls": {
                                 "self": {
                                     "href":"/schedules/123/"
+                                },
+                                "profile":{
+                                    "href":"/profiles/schedule/"
                                 }
                             }
                         }
@@ -394,7 +521,7 @@ Get all events of one schedule
                     },
                     "profile":{
                         "href":"/profiles/event/"
-                    }
+                    },
                     "collection":{
                         "href":"/schedules/123/"
                     },
@@ -422,25 +549,31 @@ Get all events of one schedule
                         "required":["name", "duration"]
                     },
                     "diary:items-in":{
-                        "href":"/schedules/123/items/
+                        "href":"/schedules/123/items/"
                     },
-                    "diary":tasks-in:{
+                    "diary:tasks-in":{
                         "href":"/schedules/123/tasks/"
                     },
-                    "items":[
-                        {
-                            "id":1,
-                            "name":"event name",
-                            "duration":3,
-                            "note": "new note",
-                            "@controls":{
-                                "self":{
-                                    "href":"/schedules/123/events/1/"
-                                }
+                    "diary:all-schedules":{
+                        "href":"/schedules/"
+                    }
+                },
+                "items":[
+                    {
+                        "id":1,
+                        "name":"event name",
+                        "duration":3,
+                        "note": "new note",
+                        "@controls":{
+                            "self":{
+                                "href":"/schedules/123/events/1/"
+                            },
+                            "profile":{
+                                "href": "/profiles/event/"
                             }
                         }
-                    ]   
-                }
+                    }
+                ]   
             }
 
 + Response 404
@@ -558,7 +691,7 @@ Add a new event into a schedule
                         "href":"/schedule/123/events/1/"
                     },
                     "profile":{
-                        "href": "/profiles/event"
+                        "href": "/profiles/event/"
                     },
                     "collection":{
                         "href":"/schedule/123/events/"
@@ -587,7 +720,7 @@ Add a new event into a schedule
                             "required":["name", "duration"]
                         }
                     },
-                    "diary:delete"{
+                    "diary:delete": {
                         "href":"/schedule/123/events/1/",
                         "method":"DELETE"
                     }
@@ -799,22 +932,28 @@ Get all schedules items
                     "diary:events-in":{
                         "href":"/schedules/123/events/
                     },
-                    "diary":tasks-in:{
+                    "diary:tasks-in":{
                         "href":"/schedules/123/tasks/"
                     },
-                    "items":[
-                        {
-                            "id":1,
-                            "name":"item name",
-                            "value":"item value"
-                            "@controls":{
-                                "self":{
-                                    "href":"/schedules/123/items/1/"
-                                }
+                    "diary:all-schedules":{
+                        "href":"/schedules/"
+                    }
+                },
+                "items":[
+                    {
+                        "id":1,
+                        "name":"item name",
+                        "value":"item value"
+                        "@controls":{
+                            "self":{
+                                "href":"/schedules/123/items/1/"
+                            },
+                            "profile":{
+                                "href":"/profiles/item/"
                             }
                         }
-                    ]
-                }
+                    }
+                ]
             }
             
 + Response 404
@@ -877,6 +1016,9 @@ Add a new item into a schedule
                     },
                     "collection":{
                         "href":"/schedules/123/items/"
+                    },
+                    "profile":{
+                        "href":"/profiles/item/"
                     },
                     "edit":{
                         "method":"PUT",
@@ -1069,6 +1211,9 @@ Get all schedules tasks
                     "self":{
                         "href": "/schedules/123/tasks/"
                     },
+                    "profile":{
+                        "href":"/profiles/task/"
+                    },
                     "diary:add-task":{
                         "method":"POST",
                         "encoding":"json",
@@ -1096,7 +1241,16 @@ Get all schedules tasks
                         },
                         "required":["name", "priority"]
                     },
-
+                    "diary:events-in":{
+                        "href":"/schedules/123/events/
+                    },
+                    "diary:items-in":{
+                        "href":"/schedules/123/items/"
+                    },
+                    "diary:all-schedules":{
+                        "href":"/schedules/"
+                    }
+                },
                 "items":[
                     {
                         "id": 1,
@@ -1107,6 +1261,9 @@ Get all schedules tasks
                         "@controls": {
                             "self": {
                                 "href":"/schedules/123/tasks/1/"
+                            },
+                            "profile":{
+                                "href":"/profiles/task/"
                             }
                         }
                     }
@@ -1238,6 +1395,9 @@ Get all schedules tasks
                     },
                     "collection":{
                         "href":"/schedules/123/tasks/"
+                    },
+                    "profile":{
+                        "href":"/profiles/task/"
                     },
                     "edit":{
                         "method":"PUT",
