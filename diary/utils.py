@@ -1,4 +1,5 @@
-from diary.api import api
+from diary.api import api, ScheduleCollection, ItemCollection, EventCollection, TaskCollection
+
 
 class MasonBuilder(dict):
     ## Class taken from:
@@ -72,9 +73,58 @@ class DiaryBuilder(MasonBuilder):
     
     def add_namespace(self):
         return super().add_namespace('diary', '/diary/link-relations/')
+    
+    def add_control_all_schedules(self):
+        return super().add_control(
+            'diary:all-schedules',
+            api.url_for(ScheduleCollection)
+        )
 
     def add_control_add_schedule(self):
         return super().add_control(
             'diary:add-schedule',
-            
+            api.url_for(ScheduleCollection),
+            method='POST',
+            encoding='json',
+            schema={
+                'type':'object',
+                'properties':{
+                    'start_time':{
+                        'description':'Start time',
+                        'type':'datetime'
+                    },
+                    'end_time':{
+                        'description':'End time',
+                        'type':'datetime'
+                    }
+                }
+            },
+            required=['start_time','end_time']
         )
+    
+    def add_control_events_in(self, schedule_id):
+        raise NotImplementedError
+
+    def add_control_items_in(self, schedule_id):
+        raise NotImplementedError
+
+    def add_control_tasks_in(self, schedule_id):
+        raise NotImplementedError
+
+    def add_control_delete_item(self, schedule_id, item_id):
+        raise NotImplementedError
+
+    def add_control_delete_event(self, schedule_id, event_id):
+        raise NotImplementedError
+    
+    def add_control_delete_task(self, schedule_id,task_id):
+        raise NotImplementedError
+
+    def add_control_add_item(self, schedule_id):
+        raise NotImplementedError
+
+    def add_control_add_task(self,schedule_id):
+        raise NotImplementedError
+
+    def add_control_add_event(self, schedule_id):
+        raise NotImplementedError
