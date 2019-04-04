@@ -1,5 +1,4 @@
-from src.app import app, db
-
+from . import db
 
 class Schedule(db.Model):
     id = db.Column(db.Integer, primary_key=True)
