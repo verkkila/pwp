@@ -1,4 +1,5 @@
 
+MIMETYPE = 'application/vnd.mason+json'
 
 SCHEDULE_COLLECTION_URI = '/diary/schedules/'
 SCHEDULE_URI = '/diary/schdeules/<schedule_id>/'
