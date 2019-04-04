@@ -1,3 +1,5 @@
+import json
+
 from flask import Response, url_for
 from flask_restful import Resource
 
@@ -26,6 +28,7 @@ class ScheduleCollection(Resource):
             item_dict.add_control('self', url_for('.Schedule', schedule_item.id))
             items.append(item_dict)
         body['items'] = items
-        return Response(json.dump(body), status=200, mimetype=MIMETYPE)
+        return Response(json.dumps(body), status=200, mimetype=MIMETYPE)
+    
     def post(self):
         raise NotImplementedError

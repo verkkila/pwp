@@ -23,8 +23,11 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
-    
     db.init_app(app)
+
     from . import api
     app.register_blueprint(api.api_bp)
+
+    from . import models
+    app.cli.add_command(models.init_db_command)
     return app
