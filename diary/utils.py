@@ -1,5 +1,16 @@
-from diary.api import api
 
+
+SCHEDULE_COLLECTION_URI = '/diary/schedules/'
+SCHEDULE_URI = '/diary/schdeules/<schedule_id>/'
+
+EVENT_COLLECTION_URI = '/diary/schedules/<schedule_id>/events/'
+EVENT_URI = '/diary/schdeules/<schedule_id>/events/<event_id>'
+
+ITEM_COLLETION_URI = '/diary/schdeules/<schedule_id>/items/'
+ITEM_URI = '/diary/schdeules/<schedule_id>/items/<item_id>/'
+
+TASK_COLLECTION_URI = '/diary/schdeules/<schedule_id>/tasks/'
+TASK_URI = '/diary/schdeules/<schedule_id>/tasks/<task_id>/'
 
 class MasonBuilder(dict):
     ## Class taken from:
@@ -77,13 +88,13 @@ class DiaryBuilder(MasonBuilder):
     def add_control_all_schedules(self):
         return super().add_control(
             'diary:all-schedules',
-            api.url_for(ScheduleCollection)
+            SCHEDULE_COLLECTION_URI
         )
 
     def add_control_add_schedule(self):
         return super().add_control(
             'diary:add-schedule',
-            api.url_for(ScheduleCollection),
+            SCHEDULE_COLLECTION_URI,
             method='POST',
             encoding='json',
             schema={
