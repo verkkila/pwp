@@ -7,7 +7,8 @@ api_bp = Blueprint('diary', __name__)
 
 api = Api(api_bp)
 
-from diary.resources.schedule_collection import SchdeuleCollection
+
+from diary.resources.schedule_collection import ScheduleCollection
 from diary.resources.schedule import Schedule
 from diary.resources.event_collection import EventCollection
 from diary.resources.event import Event

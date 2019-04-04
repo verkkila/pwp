@@ -1,11 +1,8 @@
 from flask_restful import Resource
 
-from diary.utils import DiaryBuilder 
+from diary.utils import DiaryBuilder
 
-
-
-class SchdeuleCollection(Resource):
-    
+class ScheduleCollection(Resource):
     def get(self):
         raise NotImplementedError
     
