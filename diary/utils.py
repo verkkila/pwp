@@ -96,7 +96,7 @@ class DiaryBuilder(MasonBuilder):
         body = MasonBuilder(resource_url=resource_url)
         body.add_error(title, message)
         body.add_control("profile", href='/profiles/error/')
-        return Response(json.dumps(body), status_code, mimetype=MIMETYPE)
+        return Response(json.dumps(body, indent=4), status_code, mimetype=MIMETYPE)
 
 
     def add_namespace(self):

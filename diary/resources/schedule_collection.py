@@ -26,7 +26,7 @@ class ScheduleCollection(Resource):
             item_dict['name'] = schedule_item.name
             item_dict['start_time'] = schedule_item.start_time.strftime(TIME_FORMAT)
             item_dict['end_time'] = schedule_item.end_time.strftime(TIME_FORMAT)
-            item_dict.add_control('self', url_for('.schedule', schedule_id=schedule_item.id))
+            item_dict.add_control('self', url_for('.scheduleresource', schedule_id=schedule_item.id))
             items.append(item_dict)
         body['items'] = items
         return Response(json.dumps(body, indent=4), status=200, mimetype=MIMETYPE)
