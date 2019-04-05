@@ -129,6 +129,36 @@ class DiaryBuilder(MasonBuilder):
             },
             required=['start_time','end_time']
         )
+    def add_control_edit_schedule(self, schedule_id):
+        super().add_control(
+            'edit',
+            re.sub(REGEX_PATTERN, '{}',SCHEDULE_URI).format(schedule_id),
+            encoding='json',
+            method='PUT',
+            schema={
+                'type':'object',
+                'properties':{
+                    'start_time':{
+                        'description':'Start time',
+                        'type':'datetime',
+                    },
+                    'end_time':{
+                        'description':'End time',
+                        'type':'datetime',
+                    },
+                    'name':{
+                        'description':'Schedule name',
+                        'type':'string',
+                    },
+                },
+            },
+            required=['name', 'duration']
+        )
+    def add_control_delete_schedule(self, schedule_id):
+        super().add_control(
+            'diary:delete',
+            re.sub(REGEX_PATTERN, '{}',SCHEDULE_URI).format(schedule_id),
+        )
     
     def add_control_events_in(self, schedule_id):
         super().add_control(
@@ -245,7 +275,7 @@ class DiaryBuilder(MasonBuilder):
             'edit',
             re.sub(REGEX_PATTERN, '{}',ITEM_URI).format(schedule_id, item_id),
             encoding='json',
-            method='PUT',
+            method='PATCH',
             schema={
                 'type':'object',
                 'properties':{
@@ -267,7 +297,7 @@ class DiaryBuilder(MasonBuilder):
             'edit',
             re.sub(REGEX_PATTERN, '{}',EVENT_URI).format(schedule_id, event_id),
             encoding='json',
-            method='PUT',
+            method='PATCH',
             schema={
                 'type':'object',
                 'properties':{
@@ -293,7 +323,7 @@ class DiaryBuilder(MasonBuilder):
             'edit',
             re.sub(REGEX_PATTERN, '{}',TASK_URI).format(schedule_id, task_id),
             encoding='json',
-            method='PUT',
+            method='PATCH',
             schema={
                 'type':'object',
                 'properties':{
