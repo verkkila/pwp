@@ -29,7 +29,7 @@ class ScheduleCollection(Resource):
             item_dict.add_control('self', url_for('.schedule', schedule_id=schedule_item.id))
             items.append(item_dict)
         body['items'] = items
-        return Response(json.dumps(body), status=200, mimetype=MIMETYPE)
+        return Response(json.dumps(body, indent=4), status=200, mimetype=MIMETYPE)
     
     def post(self):
         if request.json is not None:
