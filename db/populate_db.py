@@ -95,7 +95,11 @@ class Populator:
         db.session.commit()
 
 if __name__ == "__main__":
-    app = create_app()
+    config = {
+        "SQLALCHEMY_DATABASE_URI": "sqlite:///../db/test.db",
+        "TESTING": True
+    }
+    app = create_app(config)
     db.create_all()
     populator = Populator()
     s = Populator.Schedule("testSchedule", 
