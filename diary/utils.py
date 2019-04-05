@@ -1,6 +1,5 @@
 import re
 
-
 MIMETYPE = 'application/vnd.mason+json'
 
 SCHEDULE_COLLECTION_URI = '/diary/schedules/'
@@ -16,7 +15,7 @@ TASK_COLLECTION_URI = '/diary/schedules/<schedule_id>/tasks/'
 TASK_URI = '/diary/schedules/<schedule_id>/tasks/<task_id>/'
 
 
-REGEX_PATTERN = r'(<.*>)'
+REGEX_PATTERN = r'<[a-z_]*>'
 
 
 class MasonBuilder(dict):
