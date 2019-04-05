@@ -4,16 +4,16 @@ import re
 MIMETYPE = 'application/vnd.mason+json'
 
 SCHEDULE_COLLECTION_URI = '/diary/schedules/'
-SCHEDULE_URI = '/diary/schdeules/<schedule_id>/'
+SCHEDULE_URI = '/diary/schedules/<schedule_id>/'
 
 EVENT_COLLECTION_URI = '/diary/schedules/<schedule_id>/events/'
-EVENT_URI = '/diary/schdeules/<schedule_id>/events/<event_id>'
+EVENT_URI = '/diary/schedules/<schedule_id>/events/<event_id>'
 
-ITEM_COLLETION_URI = '/diary/schdeules/<schedule_id>/items/'
-ITEM_URI = '/diary/schdeules/<schedule_id>/items/<item_id>/'
+ITEM_COLLETION_URI = '/diary/schedules/<schedule_id>/items/'
+ITEM_URI = '/diary/schedules/<schedule_id>/items/<item_id>/'
 
-TASK_COLLECTION_URI = '/diary/schdeules/<schedule_id>/tasks/'
-TASK_URI = '/diary/schdeules/<schedule_id>/tasks/<task_id>/'
+TASK_COLLECTION_URI = '/diary/schedules/<schedule_id>/tasks/'
+TASK_URI = '/diary/schedules/<schedule_id>/tasks/<task_id>/'
 
 
 REGEX_PATTERN = r'(<.*>)'
