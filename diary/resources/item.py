@@ -1,6 +1,6 @@
 from flask_restful import Resource
 
-class Item(Resource):
+class ItemResource(Resource):
     
     def get(self):
         raise NotImplementedError
