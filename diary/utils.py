@@ -1,3 +1,5 @@
+import re
+
 
 MIMETYPE = 'application/vnd.mason+json'
 
@@ -13,20 +15,24 @@ ITEM_URI = '/diary/schdeules/<schedule_id>/items/<item_id>/'
 TASK_COLLECTION_URI = '/diary/schdeules/<schedule_id>/tasks/'
 TASK_URI = '/diary/schdeules/<schedule_id>/tasks/<task_id>/'
 
+
+REGEX_PATTERN = r'(<.*>)'
+
+
 class MasonBuilder(dict):
     ## Class taken from:
     ### https://lovelace.oulu.fi/ohjelmoitava-web/programmable-web-project-spring-2019/implementing-rest-apis-with-flask/#generating-hypermedia
     
-    """
+    '''
     A convenience class for managing dictionaries that represent Mason
     objects. It provides nice shorthands for inserting some of the more
     elements into the object but mostly is just a parent for the much more
     useful subclass defined next. This class is generic in the sense that it
     does not contain any application specific implementation details.
-    """
+    '''
 
     def add_error(self, title, details):
-        """
+        '''
         Adds an error element to the object. Should only be used for the root
         object, and only in error scenarios.
 
@@ -36,32 +42,32 @@ class MasonBuilder(dict):
 
         : param str title: Short title for the error
         : param str details: Longer human-readable description
-        """
+        '''
 
-        self["@error"] = {
-            "@message": title,
-            "@messages": [details],
+        self['@error'] = {
+            '@message': title,
+            '@messages': [details],
         }
 
     def add_namespace(self, ns, uri):
-        """
+        '''
         Adds a namespace element to the object. A namespace defines where our
         link relations are coming from. The URI can be an address where
         developers can find information about our link relations.
 
         : param str ns: the namespace prefix
         : param str uri: the identifier URI of the namespace
-        """
+        '''
 
-        if "@namespaces" not in self:
-            self["@namespaces"] = {}
+        if '@namespaces' not in self:
+            self['@namespaces'] = {}
 
-        self["@namespaces"][ns] = {
-            "name": uri
+        self['@namespaces'][ns] = {
+            'name': uri
         }
 
     def add_control(self, ctrl_name, href, **kwargs):
-        """
+        '''
         Adds a control property to an object. Also adds the @controls property
         if it doesn't exist on the object yet. Technically only certain
         properties are allowed for kwargs but again we're being lazy and don't
@@ -72,13 +78,13 @@ class MasonBuilder(dict):
 
         : param str ctrl_name: name of the control (including namespace if any)
         : param str href: target URI for the control
-        """
+        '''
 
-        if "@controls" not in self:
-            self["@controls"] = {}
+        if '@controls' not in self:
+            self['@controls'] = {}
 
-        self["@controls"][ctrl_name] = kwargs
-        self["@controls"][ctrl_name]["href"] = href
+        self['@controls'][ctrl_name] = kwargs
+        self['@controls'][ctrl_name]['href'] = href
 
 
 class DiaryBuilder(MasonBuilder):
@@ -115,28 +121,185 @@ class DiaryBuilder(MasonBuilder):
         )
     
     def add_control_events_in(self, schedule_id):
-        raise NotImplementedError
+        super().add_control(
+            'diary:events-in',
+            re.sub(REGEX_PATTERN, '{}',EVENT_COLLECTION_URI).format(schedule_id),
+        )
 
     def add_control_items_in(self, schedule_id):
-        raise NotImplementedError
+        super().add_control(
+            'diary:items-in',
+            re.sub(REGEX_PATTERN, '{}',ITEM_COLLECTION_URI).format(schedule_id),
+        )
 
     def add_control_tasks_in(self, schedule_id):
-        raise NotImplementedError
-
+        super().add_control(
+            'diary:items-in',
+            re.sub(REGEX_PATTERN, '{}',ITEM_COLLECTION_URI).format(schedule_id),
+        )
     def add_control_delete_item(self, schedule_id, item_id):
-        raise NotImplementedError
+        super().add_control(
+            'diary:delete',
+            re.sub(REGEX_PATTERN, '{}',ITEM_URI).format(schedule_id, item_id),
+            method='DELETE'
+        )
 
     def add_control_delete_event(self, schedule_id, event_id):
-        raise NotImplementedError
+        super().add_control(
+            'diary:delete',
+            re.sub(REGEX_PATTERN, '{}',EVENT_URI).format(schedule_id, event_id),
+            method='DELETE'
+        )
     
     def add_control_delete_task(self, schedule_id,task_id):
-        raise NotImplementedError
+        super().add_control(
+            'diary:delete',
+            re.sub(REGEX_PATTERN, '{}',TASK_URI).format(schedule_id, task_id),
+            method='DELETE'
+        )
 
-    def add_control_add_item(self, schedule_id):
-        raise NotImplementedError
+    def add_control_add_item(self, schedule_id, item_id):
+        super().add_control(
+            'diary:add-task',
+            re.sub(REGEX_PATTERN, '{}',ITEM_URI).format(schedule_id, item_id),
+            method='POST',
+            encoding='json',
+            schema={
+                'type':'object',
+                'properties':{
+                    'name':{
+                        'description':'item name',
+                        'type':'string'
+                    },
+                    'value':{
+                        'description':'Item value',
+                        'type':'number'
+                    }
+                }
+            },
+            required=['name', 'value']
+        )
+    def add_control_add_task(self,schedule_id, task_id):
+        super().add_control(
+            'diary:add-task',
+            re.sub(REGEX_PATTERN, '{}',TASK_URI).format(schedule_id, task_id),
+            method='POST',
+            encoding='json',
+            schema={
+                'type':'object',
+                'properties':{
+                    'name':{
+                        'description':'Task name',
+                        'type':'string'
+                    },
+                    'priority':{
+                        'description':'Task priority',
+                        'type':'int'
+                    },
+                    'goal':{
+                        'description':'Task goal',
+                        'type':'String'
+                    }
+                }
+            },
+            required=['name', 'priority']
+        )
 
-    def add_control_add_task(self,schedule_id):
-        raise NotImplementedError
+    def add_control_add_event(self, schedule_id, event_id):
+        super().add_control(
+            'diary:add-task',
+            re.sub(REGEX_PATTERN, '{}',EVENT_URI).format(schedule_id, event_id),
+            method='POST',
+            encoding='json',
+            schema={
+                'type':'object',
+                'properties':{
+                    'name':{
+                        'description':'event name',
+                        'type':'string'
+                    },
+                    'duration':{
+                        'description':'event duration',
+                        'type':'integer'
+                    },
+                    'note':{
+                        'description':'event note',
+                        'type':'string'
+                    }
+                }
+            },
+            required=['name', 'duration']
+        )
+    def add_control_edit_item(self, schedule_id, item_id):
+        super().add_control(
+            'edit',
+            re.sub(REGEX_PATTERN, '{}',ITEM_URI).format(schedule_id, item_id),
+            encoding='json',
+            method='PUT',
+            schema={
+                'type':'object',
+                'properties':{
+                    'name':{
+                        'description':'item name',
+                        'type':'string'
+                    },
+                    'value':{
+                        'description':'Item value',
+                        'type':'number'
+                    }
+                }
+            },
+            required=['name', 'value']
+        )
 
-    def add_control_add_event(self, schedule_id):
-        raise NotImplementedError
+    def add_control_edit_event(self, schedule_id, event_id):
+            super().add_control(
+            'edit',
+            re.sub(REGEX_PATTERN, '{}',EVENT_URI).format(schedule_id, event_id),
+            encoding='json',
+            method='PUT',
+            schema={
+                'type':'object',
+                'properties':{
+                    'name':{
+                        'description':'event name',
+                        'type':'string',
+                    },
+                    'duration':{
+                        'description':'event duration',
+                        'type':'integer',
+                    },
+                    'note':{
+                        'description':'event note',
+                        'type':'string',
+                    },
+                },
+            },
+            required=['name', 'duration']
+        )
+    
+    def add_control_edit_task(self, schedule_id, task_id):
+            super().add_control(
+            'edit',
+            re.sub(REGEX_PATTERN, '{}',TASK_URI).format(schedule_id, task_id),
+            encoding='json',
+            method='PUT',
+            schema={
+                'type':'object',
+                'properties':{
+                    'name':{
+                        'description':'Task name',
+                        'type':'string'
+                    },
+                    'priority':{
+                        'description':'Task priority',
+                        'type':'int'
+                    },
+                    'goal':{
+                        'description':'Task goal',
+                        'type':'String'
+                    }
+                }
+            },
+            required=['name', 'priority']
+        )

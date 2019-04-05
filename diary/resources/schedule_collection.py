@@ -4,7 +4,7 @@ from flask import Response, url_for
 from flask_restful import Resource
 
 from diary.models import Schedule
-from diary.utils import MasonBuilder, DiaryBuilder, MIMETYPE, SCHEDULE_COLLECTION_URI
+from diary.utils import MasonBuilder, DiaryBuilder, MIMETYPE, SCHEDULE_COLLECTION_URI, SCHEDULE_URI
 
 
 class ScheduleCollection(Resource):
@@ -25,7 +25,7 @@ class ScheduleCollection(Resource):
             # name = schedule_item.name # TODO: Name is still in models but not in api bp
             item_dict['start_time'] = schedule_item.start_time
             item_dict['end_time'] = schedule_item.end_time
-            item_dict.add_control('self', url_for('.Schedule', schedule_item.id))
+            item_dict.add_control('self', SCHEDULE_URI)
             items.append(item_dict)
         body['items'] = items
         return Response(json.dumps(body), status=200, mimetype=MIMETYPE)
