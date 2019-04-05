@@ -1,10 +1,8 @@
-import re
 import json
 from datetime import datetime
 
 from flask import Response, url_for, request
 from flask_restful import Resource
-from sqlalchemy.exc import IntegrityError
 
 from diary import db
 from diary.models import Schedule
@@ -25,6 +23,7 @@ class ScheduleCollection(Resource):
         items = []
         for schedule_item in query_results:
             item_dict = MasonBuilder()
+            item_dict['name'] = schedule_item.name
             item_dict['start_time'] = schedule_item.start_time.strftime(TIME_FORMAT)
             item_dict['end_time'] = schedule_item.end_time.strftime(TIME_FORMAT)
             item_dict.add_control('self', url_for('.schedule', schedule_id=schedule_item.id))
