@@ -27,7 +27,7 @@ class EventResource(Resource):
         return Response(json.dumps(body, indent=4), mimetype=MIMETYPE)
 
     def patch(self,schedule_id, event_id):
-        if request.json is None:
+        if request.json is not None:
             try:
                 name = request.json['name']
                 duration = int(request.json['duration'])

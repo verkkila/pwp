@@ -38,7 +38,7 @@ class EventCollection(Resource):
         return Response(json.dumps(body, indent=4),status=200, mimetype=MIMETYPE)
     
     def post(self, schedule_id):
-        if request.json is None:
+        if request.json is not None:
             try:
                 name = request.json['name']
                 duration = int(request.json['duration'])
