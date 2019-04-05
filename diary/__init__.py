@@ -23,6 +23,7 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
+    db.app = app
     db.init_app(app)
 
     from . import api

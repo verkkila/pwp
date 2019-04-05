@@ -9,10 +9,11 @@ from sqlalchemy import event
 
 sys.path.append("../")
 
-from src.app import app, db
-from src.models import Schedule, ScheduleEvent, ScheduleTask, ScheduleItem, Event, Task, Item
+from diary import create_app, db
+from diary.models import Schedule, ScheduleEvent, ScheduleTask, ScheduleItem, Event, Task, Item
 
 
+app = create_app()
 @event.listens_for(Engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):
     cursor = dbapi_connection.cursor()
