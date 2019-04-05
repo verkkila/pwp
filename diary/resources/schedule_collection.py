@@ -34,7 +34,7 @@ class ScheduleCollection(Resource):
     def post(self):
         if request.json is not None:
             try:
-                name = request.json['name']
+                name = request.json.get('name', None)
                 start_time = datetime.strptime(request.json['start_time'], TIME_FORMAT)
                 end_time = datetime.strptime(request.json['end_time'], TIME_FORMAT)
             except KeyError:

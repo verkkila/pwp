@@ -10,7 +10,7 @@ api = Api(api_bp)
 from diary.utils import (
     SCHEDULE_COLLECTION_URI,
     SCHEDULE_URI,
-    ITEM_COLLETION_URI,
+    ITEM_COLLECTION_URI,
     ITEM_URI,
     EVENT_COLLECTION_URI,
     EVENT_URI,
@@ -29,7 +29,7 @@ from diary.resources.task import TaskResource
 
 api.add_resource(ScheduleCollection,SCHEDULE_COLLECTION_URI)
 api.add_resource(ScheduleResource,SCHEDULE_URI)
-api.add_resource(ItemCollection, ITEM_COLLETION_URI)
+api.add_resource(ItemCollection, ITEM_COLLECTION_URI)
 api.add_resource(ItemResource, ITEM_URI)
 api.add_resource(EventCollection, EVENT_COLLECTION_URI)
 api.add_resource(EventResource, EVENT_URI)

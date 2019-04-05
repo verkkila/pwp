@@ -10,7 +10,7 @@ SCHEDULE_URI = '/diary/schedules/<schedule_id>/'
 EVENT_COLLECTION_URI = '/diary/schedules/<schedule_id>/events/'
 EVENT_URI = '/diary/schedules/<schedule_id>/events/<event_id>'
 
-ITEM_COLLETION_URI = '/diary/schedules/<schedule_id>/items/'
+ITEM_COLLECTION_URI = '/diary/schedules/<schedule_id>/items/'
 ITEM_URI = '/diary/schedules/<schedule_id>/items/<item_id>/'
 
 TASK_COLLECTION_URI = '/diary/schedules/<schedule_id>/tasks/'
@@ -175,7 +175,7 @@ class DiaryBuilder(MasonBuilder):
     def add_control_tasks_in(self, schedule_id):
         super().add_control(
             'diary:items-in',
-            re.sub(REGEX_PATTERN, '{}',ITEM_COLLECTION_URI).format(schedule_id),
+            re.sub(REGEX_PATTERN, '{}',TASK_COLLECTION_URI).format(schedule_id),
         )
     def add_control_delete_item(self, schedule_id, item_id):
         super().add_control(
@@ -198,10 +198,10 @@ class DiaryBuilder(MasonBuilder):
             method='DELETE'
         )
 
-    def add_control_add_item(self, schedule_id, item_id):
+    def add_control_add_item(self, schedule_id):
         super().add_control(
             'diary:add-task',
-            re.sub(REGEX_PATTERN, '{}',ITEM_URI).format(schedule_id, item_id),
+            re.sub(REGEX_PATTERN, '{}',ITEM_COLLECTION_URI).format(schedule_id),
             method='POST',
             encoding='json',
             schema={
@@ -219,10 +219,10 @@ class DiaryBuilder(MasonBuilder):
             },
             required=['name', 'value']
         )
-    def add_control_add_task(self,schedule_id, task_id):
+    def add_control_add_task(self,schedule_id):
         super().add_control(
             'diary:add-task',
-            re.sub(REGEX_PATTERN, '{}',TASK_URI).format(schedule_id, task_id),
+            re.sub(REGEX_PATTERN, '{}',TASK_COLLETION_URI).format(schedule_id),
             method='POST',
             encoding='json',
             schema={
@@ -245,10 +245,10 @@ class DiaryBuilder(MasonBuilder):
             required=['name', 'priority']
         )
 
-    def add_control_add_event(self, schedule_id, event_id):
+    def add_control_add_event(self, schedule_id):
         super().add_control(
             'diary:add-task',
-            re.sub(REGEX_PATTERN, '{}',EVENT_URI).format(schedule_id, event_id),
+            re.sub(REGEX_PATTERN, '{}',EVENT_COLLECTION_URI).format(schedule_id),
             method='POST',
             encoding='json',
             schema={
