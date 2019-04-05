@@ -13,13 +13,13 @@ from diary import create_app, db
 from diary.models import Schedule, ScheduleEvent, ScheduleTask, ScheduleItem, Event, Task, Item
 
 
-app = create_app()
 @event.listens_for(Engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):
     cursor = dbapi_connection.cursor()
     cursor.execute("PRAGMA foreign_keys=ON")
     cursor.close()
 
+app = create_app()
 @pytest.fixture
 def db_handle():
     db_fd, db_fname = tempfile.mkstemp()

@@ -23,8 +23,8 @@ class ScheduleCollection(Resource):
             item_dict = MasonBuilder()
             item_dict['id'] = schedule_item.id
             # name = schedule_item.name # TODO: Name is still in models but not in api bp
-            item_dict['start_time'] = schedule_item.start_time
-            item_dict['end_time'] = schedule_item.end_time
+            item_dict['start_time'] = json.dumps(schedule_item.start_time, indent=4, sort_keys=True, default=str)
+            item_dict['end_time'] = json.dumps(schedule_item.end_time, indent=4, sort_keys=True, default=str)
             item_dict.add_control('self', SCHEDULE_URI)
             items.append(item_dict)
         body['items'] = items
