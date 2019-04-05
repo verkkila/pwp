@@ -1,6 +1,6 @@
 from flask_restful import Resource
 
-class Event(Resource):
+class EventResource(Resource):
     
     def get(self):
         raise NotImplementedError
