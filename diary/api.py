@@ -36,7 +36,6 @@ api.add_resource(Event, EVENT_URI)
 api.add_resource(TaskCollection, TASK_COLLECTION_URI)
 api.add_resource(Task, TASK_URI)
 
-
 @api_bp.route('/')
 def index():
     return 'Hello world', 200

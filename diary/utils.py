@@ -1,6 +1,8 @@
 import re
+import json
 
-MIMETYPE = 'application/vnd.mason+json'
+from flask import request, Response
+
 
 SCHEDULE_COLLECTION_URI = '/diary/schedules/'
 SCHEDULE_URI = '/diary/schedules/<schedule_id>/'
@@ -15,8 +17,9 @@ TASK_COLLECTION_URI = '/diary/schedules/<schedule_id>/tasks/'
 TASK_URI = '/diary/schedules/<schedule_id>/tasks/<task_id>/'
 
 
+MIMETYPE = 'application/vnd.mason+json'
 REGEX_PATTERN = r'<[a-z_]*>'
-
+TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
 class MasonBuilder(dict):
     ## Class taken from:
@@ -87,7 +90,15 @@ class MasonBuilder(dict):
 
 
 class DiaryBuilder(MasonBuilder):
-    
+    @staticmethod
+    def create_error_response(status_code, title, message=None):
+        resource_url = request.path
+        body = MasonBuilder(resource_url=resource_url)
+        body.add_error(title, message)
+        body.add_control("profile", href='/profiles/error/')
+        return Response(json.dumps(body), status_code, mimetype=MIMETYPE)
+
+
     def add_namespace(self):
         return super().add_namespace('diary', '/diary/link-relations/')
     
