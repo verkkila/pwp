@@ -1,6 +1,5 @@
 import unittest
 import pytest
-from datetime import datetime
 import sys
 sys.path.append("../")
 
@@ -8,7 +7,7 @@ from diary import create_app, db
 from diary.utils import (
     SCHEDULE_COLLECTION_URI,
     SCHEDULE_URI,
-    ITEM_COLLETION_URI,
+    ITEM_COLLECTION_URI,
     ITEM_URI,
     EVENT_COLLECTION_URI,
     EVENT_URI,
@@ -29,11 +28,6 @@ def app():
         db.create_all()
 
     yield app
-
-
-def test_hello_world(app):
-    resp = app.test_client().get("/")
-    assert resp.status_code == 200
 
 def test_schedule_collection_get(app):
     resp = app.test_client().get(SCHEDULE_COLLECTION_URI)
