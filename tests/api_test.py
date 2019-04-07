@@ -65,7 +65,10 @@ def test_schedule_put(app):
     assert resp == 409
 
 def test_schedule_delete(app):
-    pass
+    resp = app.test_client().delete(SCHEDULE_COLLECTION_URI + "1/")
+    assert resp.status_code == 204
+    resp2 = app.test_client().delete(SCHEDULE_COLLECTION_URI + "10/")
+    assert resp.status_code == 404
 
 def test_event_collection_get(app):
     pass
