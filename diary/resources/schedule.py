@@ -65,5 +65,5 @@ class ScheduleResource(Resource):
         if query is None:
             return DiaryBuilder.create_error_response(404, 'Schedule does not exist')
         db.session.delete(query)
-        db.commit()
+        db.session.commit()
         return Response(status=204)

@@ -22,7 +22,7 @@ class EventResource(Resource):
         body.add_namespace()
         body.add_control('profile', '/profiles/event/')
         body.add_control('collection', url_for('.eventcollection', schedule_id=schedule_id))
-        body.add_control_add_event()
+        body.add_control_add_event(schedule_id)
         body.add_control_edit_event(schedule_id,event_id)
         body.add_control_delete_event(schedule_id, event_id)
         return Response(json.dumps(body, indent=4), mimetype=MIMETYPE)
