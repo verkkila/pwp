@@ -1,5 +1,6 @@
 import unittest
 import pytest
+import json
 import sys
 sys.path.append("../")
 
@@ -56,7 +57,12 @@ def test_schedule_get(app):
     assert resp.status_code == 404
 
 def test_schedule_put(app):
-    pass
+    resp = app.test_client().put(SCHEDULE_COLLECTION_URI + "1/", data = json.dumps({"name": "testSchedule", "start_time": "2014-03-04 09:00:00", "end_time": "2014-04-05 15:00:00"}))
+    assert resp == 204
+    resp2 = app.test_client().put(SCHEDULE_COLLECTION_URI + "10/", data = json.dumps({"name": "testSchedule", "start_time": "2014-03-04 09:00:00", "end_time": "2014-04-05 15:00:00"}))
+    assert resp == 404
+    resp2 = app.test_client().put(SCHEDULE_COLLECTION_URI + "10/", data = json.dumps({"name": "testSchedule"}))
+    assert resp == 409
 
 def test_schedule_delete(app):
     pass
