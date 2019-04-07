@@ -1,6 +1,7 @@
 import unittest
 import pytest
 import json
+import re
 import sys
 sys.path.append("../")
 
@@ -13,7 +14,8 @@ from diary.utils import (
     EVENT_COLLECTION_URI,
     EVENT_URI,
     TASK_COLLECTION_URI,
-    TASK_URI
+    TASK_URI,
+    REGEX_PATTERN
     )
 
 @pytest.fixture
@@ -61,7 +63,7 @@ def test_schedule_put(app):
     assert resp == 204
     resp2 = app.test_client().put(SCHEDULE_COLLECTION_URI + "10/", data = json.dumps({"name": "testSchedule", "start_time": "2014-03-04 09:00:00", "end_time": "2014-04-05 15:00:00"}))
     assert resp == 404
-    resp2 = app.test_client().put(SCHEDULE_COLLECTION_URI + "10/", data = json.dumps({"name": "testSchedule"}))
+    resp2 = app.test_client().put(SCHEDULE_COLLECTION_URI + "10/", data = "not json")
     assert resp == 409
 
 def test_schedule_delete(app):
@@ -71,19 +73,49 @@ def test_schedule_delete(app):
     assert resp.status_code == 404
 
 def test_event_collection_get(app):
-    pass
+    event_collection_uri = re.sub(REGEX_PATTERN, "{}", EVENT_COLLECTION_URI).format(1, 1)
+    resp = app.test_client().get(event_collection_uri)
+    assert resp.status_code == 200
+    assert resp.json["@namespaces"]["diary"]["name"] == "/diary/link-relations/"
+    assert resp.json["@controls"]["self"]["href"] == event_collection_uri
+    assert resp.json["@controls"]["profile"]["href"] == "/profile/event/"
+    assert resp.json["@controls"]["collection"]["href"] == re.sub(REGEX_PATTERN, "{}", SCHEDULE_URI).format(1)
+    assert resp.json["@controls"]["diary:add-event"]["method"] == "POST"
+    assert resp.json["@controls"]["diary:add-event"]["encoding"] == "POST"
+    assert resp.json["@controls"]["diary:add-event"]["href"] == re.sub(REGEX_PATTERN, "{}", EVENT_URI).format(1, 1)
+    assert resp.json["@controls"]["diary:add-event"]["schema"]["type"] == "object"
+    assert resp.json["@controls"]["diary:add-event"]["schema"]["properties"]["name"]["type"] == "string"
+    assert resp.json["@controls"]["diary:add-event"]["schema"]["properties"]["duration"]["type"] == "integer"
+    assert resp.json["@controls"]["diary:add-event"]["schema"]["properties"]["note"]["type"] == "string"
+    assert resp.json["@controls"]["diary:items-in"]["href"] == re.sub(REGEX_PATTERN, "{}", ITEM_COLLECTION_URI).format(1)
+    assert resp.json["@controls"]["diary:tasks-in"] == re.sub(REGEX_PATTERN, "{}", TASK_COLLECTION_URI).format(1)
+    assert resp.json["@controls"]["diary:all-schedules"] == SCHEDULE_COLLECTION_URI
 
 def test_event_collection_post(app):
-    pass
+    resp = app.test_client().post(EVENT_COLLECTION_URI, data = json.dumps({"name": "testEvent", "duration": 4, "note": "testNote"}))
+    assert resp.status_code == 201
+    resp2 = app.test_client().post(EVENT_COLLECTION_URI, data = json.dumps({"name": "testEvent", "duration": 4, "note": "testNote"}))
+    assert resp.status_code == 409
+    resp3 = app.test_client().post(EVENT_COLLECTION_URI, data = "not json")
+    assert resp.status_code == 400
 
 def test_event_get(app):
-    pass
+    resp = app.test_client().get(re.sub(REGEX_PATTERN, "{}", EVENT_URI).format(1, 1))
+    assert resp.status_code == 200
+    resp = app.test_client().get(re.sub(REGEX_PATTERN, "{}", EVENT_URI).format(10, 10))
+    assert resp.status_code == 404
 
 def test_event_patch(app):
-    pass
+    resp = app.test_client().patch(re.sub(REGEX_PATTERN, "{}", EVENT_URI).format(1, 1), data = json.dumps({"name": "testEvent", "duration": 6, "note": "new note"}))
+    assert resp.status_code == 204
+    resp = app.test_client().patch(re.sub(REGEX_PATTERN, "{}", EVENT_URI).format(1, 1), data = "not json")
+    assert resp.status_code == 400
 
 def test_event_delete(app):
-    pass
+    resp = app.test_client().delete(re.sub(REGEX_PATTERN, "{}", EVENT_URI).format(1, 1))
+    assert resp.status_code == 204
+    resp = app.test_client().delete(re.sub(REGEX_PATTERN, "{}", EVENT_URI).format(10, 10))
+    assert resp.status_code == 404
 
 def test_task_collection_get(app):
     pass
