@@ -43,20 +43,21 @@ class ScheduleResource(Resource):
                 return DiaryBuilder.create_error_response(400, 'Invalid JSON payload')
             except ValueError:
                 return DiaryBuilder.create_error_response(400, 'Invalid time format in payload')
+            else:
+                query = Schedule.query.filter_by(id=schedule_id).first()
+                if query is None:
+                    return DiaryBuilder.create_error_response(404, 'Schedule does not exit')
+                query.name = name
+                query.start_time = start_time
+                query.end_time = end_time
+                try:
+                    db.session.commit()
+                except IntegrityError:
+                    return DiaryBuilder.create_error_response(409, 'Schedule already exists')
+                else:
+                    return Response(status=204)
         else:
             DiaryBuilder.create_error_response(415, 'Json payload please')
-        query = Shedule.query.filter_by(id=schedule_id).first()
-        if query is None:
-            return DiaryBuilder.create_error_response(404, 'Schedule does not exit')
-        query.name = name
-        query.start_time = start_time
-        query.end_time = end_time
-        try:
-            db.session.commit()
-        except IntegrityError:
-            return DiaryBuilder.create_error_response(409, 'Schedule already exists')
-        else:
-            return Response(status=204)
         
 
     def delete(self, schedule_id):
@@ -66,7 +67,3 @@ class ScheduleResource(Resource):
         db.session.delete(query)
         db.commit()
         return Response(status=204)
-        
-
-
-    
