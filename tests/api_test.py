@@ -42,7 +42,12 @@ def test_schedule_collection_get(app):
     assert resp.json["@controls"]["diary:add-schedule"]["schema"]["properties"]["end_time"]
 
 def test_schedule_collection_post(app):
-    pass
+    resp = app.test_client().post(SCHEDULE_COLLECTION_URI, json={"name": "testSchedule1", "start_time": "2014-03-04 08:00:00", "end_time": "2014-04-05 16:00:00"})
+    assert resp.status_code == 201
+    resp2 = app.test_client().post(SCHEDULE_COLLECTION_URI, json={"name": "testSchedule2", "start_time": "2014-03-04 08:00:00"})
+    assert resp2.status_code == 400
+    resp3 = app.test_client().post(SCHEDULE_COLLECTION_URI, json={"name": "testSchedule2", "start_time": "2014-03-04 08:00:00", "end_time": "2014-04-05 16:00:00"})
+    assert resp3.status_code == 409
 
 def test_schedule_get(app):
     pass
