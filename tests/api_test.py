@@ -50,7 +50,10 @@ def test_schedule_collection_post(app):
     assert resp3.status_code == 409
 
 def test_schedule_get(app):
-    pass
+    resp = app.test_client().get(SCHEDULE_COLLECTION_URI + "1/")
+    assert resp.status_code == 200
+    resp = app.test_client().get(SCHEDULE_COLLECTION_URI + "10/")
+    assert resp.status_code == 404
 
 def test_schedule_put(app):
     pass
