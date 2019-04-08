@@ -11,9 +11,9 @@ from diary.utils import MasonBuilder, DiaryBuilder, MIMETYPE, TIME_FORMAT
 
 class TaskCollection(Resource):
     def get(self, schedule_id):
-        query = ScheduleTask.query.filter_by(schedule_id=schedule_id).first()
-        if query is None:
-            return DiaryBuilder.create_error_response(404, 'Schedule does not exist')
+        query = ScheduleTask.query.filter_by(schedule_id=schedule_id).all()
+        if len(query) == 0:
+            return DiaryBuilder.create_error_response(404, 'Schedule does not exist or has no tasks')
         body = DiaryBuilder()
         body.add_namespace()
         body.add_control('self', url_for('.taskcollection', schedule_id=schedule_id))
@@ -22,9 +22,9 @@ class TaskCollection(Resource):
         body.add_control_add_event(schedule_id)
         body.add_control_items_in(schedule_id)
         body.add_control_event_in(schedule_id)
-        task_list = Task.query.all()
         items = []
-        for task_item in task_list:
+        for task_item in query:
+            task_item = task_item.task
             item_dict = MasonBuilder( 
                 name=task_item.name,
                 priority=task_item.priority,
