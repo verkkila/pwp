@@ -100,8 +100,23 @@ def test_event_collection_post(app):
     assert resp3.status_code == 400
 
 def test_event_get(app):
-    resp = app.test_client().get(re.sub(REGEX_PATTERN, "{}", EVENT_URI).format(1, 1))
+    event_uri = re.sub(REGEX_PATTERN, "{}", EVENT_URI).format(1, 1)
+    resp = app.test_client().get(event_uri)
     assert resp.status_code == 200
+    assert resp.json["@namespaces"]["diary"]["name"] == "/diary/link-relations/"
+    assert resp.json["name"] == "testEvent"
+    assert resp.json["duration"] == 4
+    assert resp.json["note"] == "testNote"
+    assert resp.json["@controls"]["self"]["href"] == event_uri
+    assert resp.json["@controls"]["profile"]["href"] == "/profile/event/"
+    assert resp.json["@controls"]["collection"]["href"] == re.sub(REGEX_PATTERN, "{}", EVENT_COLLECTION_URI).format(1)
+    assert resp.json["@controls"]["edit"]["href"] == event_uri
+    assert resp.json["@controls"]["edit"]["title"] == "Edit"
+    assert resp.json["@controls"]["edit"]["encoding"] == "json"
+    assert resp.json["@controls"]["edit"]["method"] == "PUT"
+    assert resp.json["@controls"]["diary:delete"]["href"] == event_uri
+    assert resp.json["@controls"]["diary:delete"]["method"] == "DELETE"
+
     resp2 = app.test_client().get(re.sub(REGEX_PATTERN, "{}", EVENT_URI).format(10, 10))
     assert resp2.status_code == 404
 
@@ -146,9 +161,24 @@ def test_task_collection_post(app):
     assert resp3.status_code == 400
 
 def test_task_get(app):
-    resp = app.test_client().get(re.sub(REGEX_PATTERN, "{}", TASK_URI).format(1, 1))
+    task_uri = re.sub(REGEX_PATTERN, "{}", TASK_URI).format(1, 1)
+    resp = app.test_client().get(task_uri)
     assert resp.status_code == 200
-    resp2 = app.test_client().get(re.sub(REGEX_PATTERN, "{}", TASK_URI).format(1, 1))
+    assert resp.json["@namespaces"]["diary"]["name"] == "/diary/link-relations/"
+    assert resp.json["name"] == "testTask"
+    assert resp.json["priority"] == 100
+    assert resp.json["goal"] == "testGoal"
+    assert resp.json["result"] == "testResult"
+    assert resp.json["@controls"]["self"]["href"] == task_uri
+    assert resp.json["@controls"]["profile"]["href"] == "/profile/task/"
+    assert resp.json["@controls"]["collection"]["href"] == re.sub(REGEX_PATTERN, "{}", TASK_COLLECTION_URI).format(1)
+    assert resp.json["@controls"]["edit"]["href"] == task_uri
+    assert resp.json["@controls"]["edit"]["title"] == "Edit"
+    assert resp.json["@controls"]["edit"]["encoding"] == "json"
+    assert resp.json["@controls"]["edit"]["method"] == "PUT"
+    assert resp.json["@controls"]["diary:delete"]["href"] == task_uri
+    assert resp.json["@controls"]["diary:delete"]["method"] == "DELETE"
+    resp2 = app.test_client().get(task_uri)
     assert resp2.status_code == 200
 
 def test_task_patch(app):
@@ -190,9 +220,22 @@ def test_item_collection_post(app):
     assert resp3.status_code == 400
 
 def test_item_get(app):
-    resp = app.test_client().get(re.sub(REGEX_PATTERN, "{}", ITEM_URI).format(1, 1))
+    item_uri = re.sub(REGEX_PATTERN, "{}", ITEM_URI).format(1, 1)
+    resp = app.test_client().get(item_uri)
     assert resp.status_code == 200
-    resp2 = app.test_client().get(re.sub(REGEX_PATTERN, "{}", ITEM_URI).format(1, 1))
+    assert resp.json["@namespaces"]["diary"]["name"] == "/diary/link-relations/"
+    assert resp.json["name"] == "testItem"
+    assert resp.json["value"] == 50.0
+    assert resp.json["@controls"]["self"]["href"] == item_uri
+    assert resp.json["@controls"]["profile"]["href"] == "/profile/item/"
+    assert resp.json["@controls"]["collection"]["href"] == re.sub(REGEX_PATTERN, "{}", ITEM_COLLECTION_URI).format(1)
+    assert resp.json["@controls"]["edit"]["href"] == item_uri
+    assert resp.json["@controls"]["edit"]["title"] == "Edit"
+    assert resp.json["@controls"]["edit"]["encoding"] == "json"
+    assert resp.json["@controls"]["edit"]["method"] == "PUT"
+    assert resp.json["@controls"]["diary:delete"]["href"] == item_uri
+    assert resp.json["@controls"]["diary:delete"]["method"] == "DELETE"
+    resp2 = app.test_client().get(item_uri)
     assert resp2.status_code == 200
 
 def test_item_patch(app):
