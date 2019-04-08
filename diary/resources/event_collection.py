@@ -62,4 +62,3 @@ class EventCollection(Resource):
             return DiaryBuilder.create_error_response(409, 'Event already exists')
         else:
             return Response(201)
-        
