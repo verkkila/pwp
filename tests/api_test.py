@@ -37,7 +37,7 @@ def test_schedule_collection_get(app):
     assert resp.status_code == 200
     assert resp.json["@namespaces"]["diary"]["name"] == "/diary/link-relations/"
     assert resp.json["@controls"]["self"]["href"] == SCHEDULE_COLLECTION_URI
-    assert resp.json["@controls"]["profile"]["href"] == "/profile/schedule/"
+    assert resp.json["@controls"]["profile"]["href"] == "/profiles/schedule/"
     assert resp.json["@controls"]["diary:add-schedule"]["method"] == "POST"
     assert resp.json["@controls"]["diary:add-schedule"]["encoding"] == "json"
     assert resp.json["@controls"]["diary:add-schedule"]["schema"]["type"] == "object"
@@ -78,7 +78,7 @@ def test_event_collection_get(app):
     assert resp.status_code == 200
     assert resp.json["@namespaces"]["diary"]["name"] == "/diary/link-relations/"
     assert resp.json["@controls"]["self"]["href"] == event_collection_uri
-    assert resp.json["@controls"]["profile"]["href"] == "/profile/event/"
+    assert resp.json["@controls"]["profile"]["href"] == "/profiles/event/"
     assert resp.json["@controls"]["collection"]["href"] == re.sub(REGEX_PATTERN, "{}", SCHEDULE_URI).format(1)
     assert resp.json["@controls"]["diary:add-event"]["method"] == "POST"
     assert resp.json["@controls"]["diary:add-event"]["encoding"] == "json"
@@ -108,7 +108,7 @@ def test_event_get(app):
     assert resp.json["duration"] == 4
     assert resp.json["note"] == "testNote"
     assert resp.json["@controls"]["self"]["href"] == event_uri
-    assert resp.json["@controls"]["profile"]["href"] == "/profile/event/"
+    assert resp.json["@controls"]["profile"]["href"] == "/profiles/event/"
     assert resp.json["@controls"]["collection"]["href"] == re.sub(REGEX_PATTERN, "{}", EVENT_COLLECTION_URI).format(1)
     assert resp.json["@controls"]["edit"]["href"] == event_uri
     assert resp.json["@controls"]["edit"]["title"] == "Edit"
@@ -138,7 +138,7 @@ def test_task_collection_get(app):
     assert resp.status_code == 200
     assert resp.json["@namespaces"]["diary"]["name"] == "/diary/link-relations/"
     assert resp.json["@controls"]["self"]["href"] == task_collection_uri
-    assert resp.json["@controls"]["profile"]["href"] == "/profile/task/"
+    assert resp.json["@controls"]["profile"]["href"] == "/profiles/task/"
     assert resp.json["@controls"]["collection"]["href"] == re.sub(REGEX_PATTERN, "{}", SCHEDULE_URI).format(1)
     assert resp.json["@controls"]["diary:add-task"]["method"] == "POST"
     assert resp.json["@controls"]["diary:add-task"]["encoding"] == "json"
@@ -170,7 +170,7 @@ def test_task_get(app):
     assert resp.json["goal"] == "testGoal"
     assert resp.json["result"] == "testResult"
     assert resp.json["@controls"]["self"]["href"] == task_uri
-    assert resp.json["@controls"]["profile"]["href"] == "/profile/task/"
+    assert resp.json["@controls"]["profile"]["href"] == "/profiles/task/"
     assert resp.json["@controls"]["collection"]["href"] == re.sub(REGEX_PATTERN, "{}", TASK_COLLECTION_URI).format(1)
     assert resp.json["@controls"]["edit"]["href"] == task_uri
     assert resp.json["@controls"]["edit"]["title"] == "Edit"
@@ -199,7 +199,7 @@ def test_item_collection_get(app):
     assert resp.status_code == 200
     assert resp.json["@namespaces"]["diary"]["name"] == "/diary/link-relations/"
     assert resp.json["@controls"]["self"]["href"] == item_collection_uri
-    assert resp.json["@controls"]["profile"]["href"] == "/profile/item/"
+    assert resp.json["@controls"]["profile"]["href"] == "/profiles/item/"
     assert resp.json["@controls"]["collection"]["href"] == re.sub(REGEX_PATTERN, "{}", SCHEDULE_URI).format(1)
     assert resp.json["@controls"]["diary:add-item"]["method"] == "POST"
     assert resp.json["@controls"]["diary:add-item"]["encoding"] == "json"
@@ -227,7 +227,7 @@ def test_item_get(app):
     assert resp.json["name"] == "testItem"
     assert resp.json["value"] == 50.0
     assert resp.json["@controls"]["self"]["href"] == item_uri
-    assert resp.json["@controls"]["profile"]["href"] == "/profile/item/"
+    assert resp.json["@controls"]["profile"]["href"] == "/profiles/item/"
     assert resp.json["@controls"]["collection"]["href"] == re.sub(REGEX_PATTERN, "{}", ITEM_COLLECTION_URI).format(1)
     assert resp.json["@controls"]["edit"]["href"] == item_uri
     assert resp.json["@controls"]["edit"]["title"] == "Edit"
