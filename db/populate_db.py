@@ -103,8 +103,8 @@ if __name__ == "__main__":
     db.create_all()
     populator = Populator()
     s = Populator.Schedule("testSchedule", 
-            datetime.strptime("2019-05-04 08:00:00", "%y-%m-%d %H:%M:%S"),
-            datetime.strptime("2019-05-04 16:00:00", "%y-%m-%d %H:%M:%S"))
+            datetime.strptime("2019-05-04 08:00:00", "%Y-%m-%d %H:%M:%S"),
+            datetime.strptime("2019-05-04 16:00:00", "%Y-%m-%d %H:%M:%S"))
     s.add_event(Populator.Event("testEvent", 4, "testNote"))
     s.add_task(Populator.Task("testTask", 100, "testGoal", "testResult"))
     s.add_item(Populator.Item("testItem", 50.0))
