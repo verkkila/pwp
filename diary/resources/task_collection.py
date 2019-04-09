@@ -19,7 +19,7 @@ class TaskCollection(Resource):
         body.add_control('self', url_for('.taskcollection', schedule_id=schedule_id))
         body.add_control('collection', url_for('.scheduleresource',schedule_id=schedule_id))
         body.add_control('profile','/profiles/task/')
-        body.add_control_add_event(schedule_id)
+        body.add_control_add_task(schedule_id)
         body.add_control_items_in(schedule_id)
         body.add_control_events_in(schedule_id)
         body.add_control_all_schedules()

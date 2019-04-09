@@ -88,8 +88,8 @@ def test_event_collection_get(app):
     assert resp.json["@controls"]["diary:add-event"]["schema"]["properties"]["duration"]["type"] == "integer"
     assert resp.json["@controls"]["diary:add-event"]["schema"]["properties"]["note"]["type"] == "string"
     assert resp.json["@controls"]["diary:items-in"]["href"] == re.sub(REGEX_PATTERN, "{}", ITEM_COLLECTION_URI).format(1)
-    assert resp.json["@controls"]["diary:tasks-in"] == re.sub(REGEX_PATTERN, "{}", TASK_COLLECTION_URI).format(1)
-    assert resp.json["@controls"]["diary:all-schedules"] == SCHEDULE_COLLECTION_URI
+    assert resp.json["@controls"]["diary:tasks-in"]["href"] == re.sub(REGEX_PATTERN, "{}", TASK_COLLECTION_URI).format(1)
+    assert resp.json["@controls"]["diary:all-schedules"]["href"] == SCHEDULE_COLLECTION_URI
 
 def test_event_collection_post(app):
     resp = app.test_client().post(EVENT_COLLECTION_URI, data = json.dumps({"name": "testEvent", "duration": 4, "note": "testNote"}))
@@ -144,12 +144,12 @@ def test_task_collection_get(app):
     assert resp.json["@controls"]["diary:add-task"]["href"] == re.sub(REGEX_PATTERN, "{}", TASK_COLLECTION_URI).format(1)
     assert resp.json["@controls"]["diary:add-task"]["schema"]["type"] == "object"
     assert resp.json["@controls"]["diary:add-task"]["schema"]["properties"]["name"]["type"] == "string"
-    assert resp.json["@controls"]["diary:add-task"]["schema"]["properties"]["priority"]["type"] == "int"
+    assert resp.json["@controls"]["diary:add-task"]["schema"]["properties"]["priority"]["type"] == "integer"
     assert resp.json["@controls"]["diary:add-task"]["schema"]["properties"]["goal"]["type"] == "string"
     assert resp.json["@controls"]["diary:add-task"]["schema"]["properties"]["result"]["type"] == "string"
     assert resp.json["@controls"]["diary:items-in"]["href"] == re.sub(REGEX_PATTERN, "{}", ITEM_COLLECTION_URI).format(1)
-    assert resp.json["@controls"]["diary:events-in"] == re.sub(REGEX_PATTERN, "{}", EVENT_COLLECTION_URI).format(1)
-    assert resp.json["@controls"]["diary:all-schedules"] == SCHEDULE_COLLECTION_URI
+    assert resp.json["@controls"]["diary:events-in"]["href"] == re.sub(REGEX_PATTERN, "{}", EVENT_COLLECTION_URI).format(1)
+    assert resp.json["@controls"]["diary:all-schedules"]["href"] == SCHEDULE_COLLECTION_URI
 
 def test_task_collection_post(app):
     resp = app.test_client().post(re.sub(REGEX_PATTERN, "{}", TASK_COLLECTION_URI).format(1), data = json.dumps({"name": "testTask", "priority": 10, "goal": "testGoal", "result": "testResult"}))
@@ -204,7 +204,7 @@ def test_item_collection_get(app):
     assert resp.json["@controls"]["diary:add-item"]["href"] == re.sub(REGEX_PATTERN, "{}", ITEM_COLLECTION_URI).format(1)
     assert resp.json["@controls"]["diary:add-item"]["schema"]["type"] == "object"
     assert resp.json["@controls"]["diary:add-item"]["schema"]["properties"]["name"]["type"] == "string"
-    assert resp.json["@controls"]["diary:add-item"]["schema"]["properties"]["value"]["type"] == "number"
+    assert resp.json["@controls"]["diary:add-item"]["schema"]["properties"]["value"]["type"] == "float"
     assert resp.json["@controls"]["diary:tasks-in"]["href"] == re.sub(REGEX_PATTERN, "{}", TASK_COLLECTION_URI).format(1)
     assert resp.json["@controls"]["diary:events-in"]["href"] == re.sub(REGEX_PATTERN, "{}", EVENT_COLLECTION_URI).format(1)
     assert resp.json["@controls"]["diary:all-schedules"]["href"] == SCHEDULE_COLLECTION_URI

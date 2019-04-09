@@ -213,7 +213,7 @@ class DiaryBuilder(MasonBuilder):
                     },
                     'value':{
                         'description':'Item value',
-                        'type':'number'
+                        'type':'float'
                     }
                 }
             },
@@ -234,11 +234,15 @@ class DiaryBuilder(MasonBuilder):
                     },
                     'priority':{
                         'description':'Task priority',
-                        'type':'int'
+                        'type':'integer'
                     },
                     'goal':{
                         'description':'Task goal',
-                        'type':'String'
+                        'type':'string'
+                    },
+                    'result':{
+                        'description':'Task result',
+                        'type':'string'
                     }
                 }
             },
@@ -247,7 +251,7 @@ class DiaryBuilder(MasonBuilder):
 
     def add_control_add_event(self, schedule_id):
         super().add_control(
-            'diary:add-task',
+            'diary:add-event',
             re.sub(REGEX_PATTERN, '{}',EVENT_COLLECTION_URI).format(schedule_id),
             method='POST',
             encoding='json',
@@ -285,7 +289,7 @@ class DiaryBuilder(MasonBuilder):
                     },
                     'value':{
                         'description':'Item value',
-                        'type':'number'
+                        'type':'float'
                     }
                 }
             },
@@ -333,7 +337,7 @@ class DiaryBuilder(MasonBuilder):
                     },
                     'priority':{
                         'description':'Task priority',
-                        'type':'int'
+                        'type':'integer'
                     },
                     'goal':{
                         'description':'Task goal',
