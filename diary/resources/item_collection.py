@@ -22,6 +22,7 @@ class ItemCollection(Resource):
         body.add_control_add_item(schedule_id)
         body.add_control_events_in(schedule_id)
         body.add_control_tasks_in(schedule_id)
+        body.add_control_all_schedules()
         items = []
         for item in query:
             item = item.item

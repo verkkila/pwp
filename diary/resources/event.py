@@ -20,6 +20,7 @@ class EventResource(Resource):
         body['note'] = event_item.note
         body['duration'] = event_item.duration
         body.add_namespace()
+        body.add_control('self',url_for('.eventresource',schedule_id=schedule_id,event_id=event_id))
         body.add_control('profile', '/profiles/event/')
         body.add_control('collection', url_for('.eventcollection', schedule_id=schedule_id))
         body.add_control_add_event(schedule_id)

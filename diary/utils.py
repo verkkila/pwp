@@ -174,7 +174,7 @@ class DiaryBuilder(MasonBuilder):
 
     def add_control_tasks_in(self, schedule_id):
         super().add_control(
-            'diary:items-in',
+            'diary:tasks-in',
             re.sub(REGEX_PATTERN, '{}',TASK_COLLECTION_URI).format(schedule_id),
         )
     def add_control_delete_item(self, schedule_id, item_id):
@@ -200,7 +200,7 @@ class DiaryBuilder(MasonBuilder):
 
     def add_control_add_item(self, schedule_id):
         super().add_control(
-            'diary:add-task',
+            'diary:add-item',
             re.sub(REGEX_PATTERN, '{}',ITEM_COLLECTION_URI).format(schedule_id),
             method='POST',
             encoding='json',
@@ -222,7 +222,7 @@ class DiaryBuilder(MasonBuilder):
     def add_control_add_task(self,schedule_id):
         super().add_control(
             'diary:add-task',
-            re.sub(REGEX_PATTERN, '{}',TASK_COLLETION_URI).format(schedule_id),
+            re.sub(REGEX_PATTERN, '{}',TASK_COLLECTION_URI).format(schedule_id),
             method='POST',
             encoding='json',
             schema={

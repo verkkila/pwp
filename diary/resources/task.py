@@ -21,6 +21,7 @@ class TaskResource(Resource):
         body['goal'] = task_item.goal
         body['result'] = task_item.result
         body.add_namespace()
+        body.add_control('self',url_for('.taskresource',schedule_id=schedule_id,task_id=task_id))
         body.add_control('profile', '/profiles/task/')
         body.add_control('collection', url_for('.taskcollection', schedule_id=schedule_id))
         body.add_control_add_task(schedule_id)

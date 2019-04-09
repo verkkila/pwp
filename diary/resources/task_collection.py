@@ -21,7 +21,8 @@ class TaskCollection(Resource):
         body.add_control('profile','/profiles/task/')
         body.add_control_add_event(schedule_id)
         body.add_control_items_in(schedule_id)
-        body.add_control_event_in(schedule_id)
+        body.add_control_events_in(schedule_id)
+        body.add_control_all_schedules()
         items = []
         for task_item in query:
             task_item = task_item.task

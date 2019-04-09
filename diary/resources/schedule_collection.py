@@ -16,7 +16,7 @@ class ScheduleCollection(Resource):
 
         body.add_namespace()
         body.add_control('self', url_for('.schedulecollection'))
-        body.add_control('profile','/profile/schedule/')
+        body.add_control('profile','/profiles/schedule/')
         body.add_control_add_schedule()
 
         query_results = Schedule.query.all()

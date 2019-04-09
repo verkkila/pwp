@@ -81,7 +81,7 @@ class Populator:
                 db.session.add(SE)
 
             for t in s.tasks:
-                T = models.Task(name=e.name, priority=t.priority, goal=t.goal, result=t.result)
+                T = models.Task(name=t.name, priority=t.priority, goal=t.goal, result=t.result)
                 ST = models.ScheduleTask(schedule=S, task=T)
                 db.session.add(T)
                 db.session.add(ST)
