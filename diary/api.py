@@ -39,5 +39,6 @@ api.add_resource(TaskResource, TASK_URI)
 
 @api_bp.route('/')
 def index():
+    return api_bp.send_static_file('html/index.html')
     return 'Hello world', 200
 
