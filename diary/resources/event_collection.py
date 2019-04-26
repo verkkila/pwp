@@ -26,10 +26,11 @@ class EventCollection(Resource):
         items = []
         for event_item in query:
             event_item = event_item.event
-            item_dict = MasonBuilder( 
+            item_dict = MasonBuilder(
                 name=event_item.name,
                 duration=event_item.duration,
-                note=event_item.note
+                note=event_item.note,
+                id=event_item.id
                 )
             item_dict.add_control(
                 'self',url_for('.eventresource',schedule_id=schedule_id,event_id=event_item.id))

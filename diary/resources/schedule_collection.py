@@ -24,6 +24,7 @@ class ScheduleCollection(Resource):
         for schedule_item in query_results:
             item_dict = MasonBuilder()
             item_dict['name'] = schedule_item.name
+            item_dict['id'] = schedule_item.id 
             item_dict['start_time'] = schedule_item.start_time.strftime(TIME_FORMAT)
             item_dict['end_time'] = schedule_item.end_time.strftime(TIME_FORMAT)
             item_dict.add_control('self', url_for('.scheduleresource', schedule_id=schedule_item.id))

@@ -30,7 +30,8 @@ class TaskCollection(Resource):
                 name=task_item.name,
                 priority=task_item.priority,
                 goal=task_item.goal,
-                result=task_item.result
+                result=task_item.result,
+                id=task_item.id
                 )
             item_dict.add_control(
                 'self',url_for('.taskresource',schedule_id=schedule_id,task_id=task_item.id))

@@ -29,6 +29,7 @@ class ItemCollection(Resource):
             item_dict = MasonBuilder( 
                 name=item.name,
                 value=item.value,
+                id=item.id
                 )
             item_dict.add_control(
                 'self',url_for('.itemresource',schedule_id=schedule_id,item_id=item.id))
