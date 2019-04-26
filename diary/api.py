@@ -39,6 +39,20 @@ api.add_resource(TaskResource, TASK_URI)
 
 @api_bp.route('/')
 def index():
-    return api_bp.send_static_file('html/index.html')
     return 'Hello world', 200
 
+@api_bp.route('/schedules/')
+def schedules():
+    return api_bp.send_from_static('html/schedules.html')
+
+@api_bp.route('/tasks?schedule_id/')
+def schedules():
+    return api_bp.send_from_static('html/tasks.html')
+
+@api_bp.route('/items?schedule_id/')
+def schedules():
+    return api_bp.send_from_static('html/items.html')
+
+@api_bp.route('/events?schedule_id/')
+def schedules():
+    return api_bp.send_from_static('html/events.html')
