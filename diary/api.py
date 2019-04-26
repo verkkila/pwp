@@ -2,8 +2,9 @@
 from flask import Blueprint, redirect
 from flask_restful import Api
 
+STATIC_PATH = '../static/'
 
-api_bp = Blueprint('diary', __name__)
+api_bp = Blueprint('diary', __name__,static_folder=STATIC_PATH)
 
 api = Api(api_bp)
 
