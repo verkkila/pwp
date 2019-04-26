@@ -5,19 +5,23 @@
     <meta charset="utf-8" />
     <!-- <link rel="stylesheet" type="text/css" href="/static/css/admin.css"> -->
     <title>Diary</title>
-    <script type="text/javascript" src="/static/scripts/jquery.js"></script>
-    <script type="text/javascript" src="/static/scripts/schedules.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.js"></script>
+    <script type="text/javascript" src="/static/js/utils.js"></script>
+    <script type="text/javascript" src="/static/js/schedules.js"></script>
 </head>
 
 <body>
+    <div class="navigation">
+
+    </div>
     <div class="form-post">
         <p>
             Create new schedule
         </p>
-        <form id="new-post" method="POST" action='/diary/schedules/'>
+        <form id="new-post" method="POST">
             Name <input type="text" name="name"><br>
-            Start time <input type="datetime-local" name="start_time"><br>
-            End time <input type="datetime-local" name="end_time"><br>
+            Duration <input type="integer" name="duration"><br>
+            Note <input type="text" name="note"><br>
             <input type="submit" value="Submit" name="submit">
         </form>
     </div>
@@ -26,15 +30,12 @@
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Start time</th>
-                    <th>End time</th>
-                    <th>Events</th>
-                    <th>Items</th>
-                    <th>Tasks</th>
+                    <th>Duration</th>
+                    <th>Note</th>
                 </tr>
             </thead>
             <tbody>
-                
+
             </tbody>
         </table>
     </div>
