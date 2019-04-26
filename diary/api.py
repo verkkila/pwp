@@ -41,7 +41,7 @@ api.add_resource(TaskResource, TASK_URI)
 def index():
     return redirect(url_for(".schedules"))
 
-@api_bp.route('/schedules')
+@api_bp.route('/schedules/')
 def schedules():
     return api_bp.send_static_file('html/schedules.html')
 
