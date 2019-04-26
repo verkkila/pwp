@@ -1,5 +1,5 @@
 
-from flask import Blueprint, redirect
+from flask import Blueprint, redirect, request
 from flask_restful import Api
 
 STATIC_PATH = '../static/'
@@ -39,20 +39,27 @@ api.add_resource(TaskResource, TASK_URI)
 
 @api_bp.route('/')
 def index():
-    return 'Hello world', 200
+    return redirect(url_for(".schedules"))
 
-@api_bp.route('/schedules/')
+@api_bp.route('/schedules')
 def schedules():
-    return api_bp.send_from_static('html/schedules.html')
+    return api_bp.send_static_file('html/schedules.html')
 
-@api_bp.route('/tasks?schedule_id/')
-def schedules():
-    return api_bp.send_from_static('html/tasks.html')
+@api_bp.route('/tasks')
+def tasks():
+    if request.args.get("schedule_id", None) is None:
+        return "Schedule id not specified", 400
+    print(request.args["schedule_id"])
+    return api_bp.send_static_file('html/tasks.html')
 
-@api_bp.route('/items?schedule_id/')
-def schedules():
-    return api_bp.send_from_static('html/items.html')
+@api_bp.route('/items')
+def items():
+    if request.args.get("schedule_id", None) is None:
+        return "Schedule id not specified", 400
+    return api_bp.send_static_file('html/items.html')
 
-@api_bp.route('/events?schedule_id/')
-def schedules():
-    return api_bp.send_from_static('html/events.html')
+@api_bp.route('/events')
+def events():
+    if request.args.get("schedule_id", None) is None:
+        return "Schedule id not specified", 400
+    return api_bp.send_static_file('html/events.html')
