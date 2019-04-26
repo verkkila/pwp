@@ -41,24 +41,24 @@ api.add_resource(TaskResource, TASK_URI)
 def index():
     return redirect(url_for(".schedules"))
 
-@api_bp.route('/schedules')
+@api_bp.route('/schedules/')
 def schedules():
     return api_bp.send_static_file('html/schedules.html')
 
-@api_bp.route('/tasks')
+@api_bp.route('/tasks/')
 def tasks():
     if request.args.get("schedule_id", None) is None:
         return "Schedule id not specified", 400
     print(request.args["schedule_id"])
     return api_bp.send_static_file('html/tasks.html')
 
-@api_bp.route('/items')
+@api_bp.route('/items/')
 def items():
     if request.args.get("schedule_id", None) is None:
         return "Schedule id not specified", 400
     return api_bp.send_static_file('html/items.html')
 
-@api_bp.route('/events')
+@api_bp.route('/events/')
 def events():
     if request.args.get("schedule_id", None) is None:
         return "Schedule id not specified", 400
