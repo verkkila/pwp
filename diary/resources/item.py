@@ -33,7 +33,7 @@ class ItemResource(Resource):
         if request.json is not None:
             try:
                 name = request.json['name']
-                value = float(request.json['duration'])
+                value = float(request.json['value'])
             except KeyError:
                 return DiaryBuilder.create_error_response(400, 'Invalid json payload')
             except ValueError:
