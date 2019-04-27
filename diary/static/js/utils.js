@@ -9,15 +9,17 @@ function createTableRowsHtml(rowItems) {
     return htmlString + "</tr>";
 }
 
-function createTableCell(item) {
-    let tableRowString = "<td contenteditable> " + item + " </td>";
+function createTableCell(item, className) {
+    let tableRowString = "<td class='" + className + "' contentEditable='true'> " + item + " </td>";
     return tableRowString;
 }
+
 
 function createTableLinkCell(href, linkName = "Link") {
     let tableRowString = "<td>" + "<a href='" + href + "'>" + linkName + "</a>" + "</td>";
     return tableRowString;
 }
+
 
 function submitForm(onSuccessFunc) {
     let form = $("#new-post")
@@ -98,3 +100,4 @@ function deleteRow(button){
         $(button).parents('tr').remove()    
     })
 }
+
