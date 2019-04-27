@@ -54,7 +54,7 @@ class ItemResource(Resource):
         else:
             Response(status=204)
 
-    def delete(self, schedule_id, event_id):
+    def delete(self, schedule_id, item_id):
         query = Item.query.filter_by(id=item_id).first()
         if query is None:
             return DiaryBuilder.create_error_response(404, 'Item does not exist')

@@ -53,9 +53,9 @@ class ScheduleItem(db.Model):
         db.PrimaryKeyConstraint('schedule_id', 'item_id'),
     )
     schedule_id = db.Column(
-        db.ForeignKey('schedule.id'), nullable=False)
+        db.ForeignKey('schedule.id'), nullable=False, primary_key=True)
     item_id = db.Column(
-        db.ForeignKey('item.id'), nullable=False)
+        db.ForeignKey('item.id'), nullable=False, primary_key=True)
 
     schedule = db.relationship(
             'Schedule', back_populates='schedule_items')

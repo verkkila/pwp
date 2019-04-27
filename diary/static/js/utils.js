@@ -4,13 +4,13 @@ const MASON = "application/vnd.mason+json"
 function createTableRowsHtml(rowItems) {
     let htmlString = "<tr>";
     for (var item in rowItems) {
-        htmlString += createTableRow(item);
+        htmlString += createTableCell(item);
     }
     return htmlString + "</tr>";
 }
 
-function createTableRow(item) {
-    let tableRowString = "<td> " + item + " </td>";
+function createTableCell(item) {
+    let tableRowString = "<td contenteditable> " + item + " </td>";
     return tableRowString;
 }
 
@@ -20,15 +20,19 @@ function createTableLinkRow(href, linkName = "Link") {
 }
 
 function submitForm(onSuccessFunc) {
-    let form = $("<form>");
-    form.submitForm(function (event) {
+    let form = $("#new-post")
+    form.submit(function (event) {
         event.preventDefault();
-        let form = $("#new-post");
-        let data = form.serialize();
+        let formData = form.serializeArray();
+        let outData = {}
+        for (var i=0; i < formData.length; i++){
+            outData[formData[i]['name']] = formData[i]['value'];
+        }
+        console.log(outData)
         $.ajax({
             url: form.attr("action"),
             method: form.attr("method"),
-            data: data,
+            data: JSON.stringify(outData),
             contentType: MASON,
             processData: false,
             success: onSuccessFunc
@@ -67,6 +71,7 @@ function setNavLinks(){
     let eventLink = $('div.navigation #event-link');
     let itemLink = $('div.navigation #item-link');
     let taskLink = $('div.navigation #task-link');
+    let schedulesLink = $('div.navigation #schedules-collection')
     if (eventLink.attr("href") != null){
         eventLink.attr("href", urlForSubCollection("events"));
     }
@@ -76,6 +81,8 @@ function setNavLinks(){
     if (itemLink.attr("href") != null){
         itemLink.attr("href", urlForSubCollection("items"));
     }
+    if (schedulesLink.attr("href") != null){
+        schedulesLink.attr("href", "/schedules/");
+    }
 
 }
-

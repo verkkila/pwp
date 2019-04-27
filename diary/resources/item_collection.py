@@ -39,10 +39,11 @@ class ItemCollection(Resource):
         return Response(json.dumps(body, indent=4),status=200, mimetype=MIMETYPE)
     
     def post(self,schedule_id):
-        if request.json is not None:
+        data = request.get_json()
+        if data is not None:
             try:
                 name = request.json['name']
-                value = float(request.json['duration'])
+                value = float(request.json['value'])
             except KeyError:
                 return DiaryBuilder.create_error_response(400, 'Invalid json payload')
             except ValueError:
@@ -60,5 +61,5 @@ class ItemCollection(Resource):
         except IntegrityError:
             return DiaryBuilder.create_error_response(409, 'Item already exists')
         else:
-            return Response(201)
+            return Response(status=201)
 
