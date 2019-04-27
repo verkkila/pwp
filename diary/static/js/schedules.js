@@ -9,16 +9,20 @@ function setRows(body){
 
 function updateRow(item){
     let tbody = $(".resulttable tbody");
-    tbody.append("<tr>")
-    tbody.append(createTableCell(item.name));
-    tbody.append(createTableCell(item.start_time));
-    tbody.append(createTableCell(item.end_time));
-    tbody.append(createTableLinkRow('/events?schedule_id='+item.id, "Events"))
-    tbody.append(createTableLinkRow('/items?schedule_id='+item.id, "Items"))
-    tbody.append(createTableLinkRow('/tasks?schedule_id='+item.id, "Tasks"))
-    tbody.append("<td><button onclick='deleteItem(item.id)'>&#10006;</button></td>");
-    tbody.append("</tr>")
+    let htmlStr = "<tr>" + createTableCell(item.name) +
+    createTableCell(item.start_time) + createTableCell(item.end_time) +
+    createTableLinkCell('/events?schedule_id='+item.id, "Events") + 
+    createTableLinkCell('/items?schedule_id='+item.id, "Items") + 
+    createTableLinkCell('/tasks?schedule_id='+item.id, "Tasks") +
+    "<td>" + "<form method='DELETE' action='/diary/schedules/" + item.id + "/'>" +
+    "<input type='submit'  onclick='deleteRow(this)'value='&#x2718;'></input>"
+    "</form>"
+    "</td></tr>";
+    tbody.append(htmlStr)
 }
+
+
+
 
 $(document).ready(function (){
     getResource("http://localhost:5000/diary/schedules/", setRows)

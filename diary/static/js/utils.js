@@ -14,7 +14,7 @@ function createTableCell(item) {
     return tableRowString;
 }
 
-function createTableLinkRow(href, linkName = "Link") {
+function createTableLinkCell(href, linkName = "Link") {
     let tableRowString = "<td>" + "<a href='" + href + "'>" + linkName + "</a>" + "</td>";
     return tableRowString;
 }
@@ -85,4 +85,16 @@ function setNavLinks(){
         schedulesLink.attr("href", "/schedules/");
     }
 
+}
+
+function deleteRow(button){
+    let form = $(button).parent();
+    form.submit(function(event){
+        event.preventDefault();
+        $.ajax({
+            url:form.attr("action"),
+            method:"DELETE"
+        });
+        $(button).parents('tr').remove()    
+    })
 }

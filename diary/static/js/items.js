@@ -19,18 +19,6 @@ function updateRow(item){
 }
 
 
-function deleteRow(button){
-    form = $(button).parent();
-    form.submit(function(event){
-        event.preventDefault();
-        console.log(form.attr("action"))
-        $.ajax({
-            url:form.attr("action"),
-            method:"DELETE"
-        });
-        $(button).parents('tr').remove()    
-    })
-}
 
 function getTableOnSubmit(body){
     $(".resulttable tbody").empty();
