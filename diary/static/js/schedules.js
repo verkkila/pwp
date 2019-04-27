@@ -21,10 +21,15 @@ function updateRow(item){
     tbody.append(htmlStr)
 }
 
-
+function getTableOnSubmit(body){
+    $(".resulttable tbody").empty();
+    getResource(
+        "http://localhost:5000/diary/schedules/",
+        setRows);
+}
 
 
 $(document).ready(function (){
     getResource("http://localhost:5000/diary/schedules/", setRows)
-    submitForm(updateRow)
+    submitForm(getTableOnSubmit)
 })

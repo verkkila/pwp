@@ -1,6 +1,5 @@
 function setRows(body){
     let items = body.items;
-    let tbody = $(".resulttable tbody");
     items.forEach(function(item) {
         updateRow(item)
     });

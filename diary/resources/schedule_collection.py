@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+from dateutil import parser
 
 from flask import Response, url_for, request
 from flask_restful import Resource
@@ -36,8 +37,8 @@ class ScheduleCollection(Resource):
         if request.json is not None:
             try:
                 name = request.json.get('name', None)
-                start_time = datetime.strptime(request.json['start_time'], TIME_FORMAT)
-                end_time = datetime.strptime(request.json['end_time'], TIME_FORMAT)
+                start_time = parser.parse(request.json['start_time'])
+                end_time = parser.parse(request.json['end_time'])
             except KeyError:
                 return DiaryBuilder.create_error_response(400, 'Invalid JSON payload')
             except ValueError:
