@@ -7,26 +7,28 @@
     <title>Diary</title>
     <script type="text/javascript" src="/static/js/jquery.js"></script>
     <script type="text/javascript" src="/static/js/utils.js"></script>
-    <script type="text/javascript" src="/static/js/schedules.js"></script>
+    <script type="text/javascript" src="/static/js/events.js"></script>
 </head>
 
 <body>
     <div class="navigation">
-
+        <a id="schedules-collection" href="">View schedules</a>
+        <a id="task-link" href="">Tasks</a>
+        <a id="item-link" href="">Items</a>
     </div>
     <div class="form-post">
         <p>
-            Create new schedule
+            Add new event to schedule
         </p>
         <form id="new-post" method="POST">
             Name <input type="text" name="name"><br>
-            Duration <input type="integer" name="duration"><br>
+            Duration <input type="number" name="duration"><br>
             Note <input type="text" name="note"><br>
             <input type="submit" value="Submit" name="submit">
         </form>
     </div>
     <div class="tablecontents">
-        <table>
+        <table class="resulttable">
             <thead>
                 <tr>
                     <th>Name</th>
