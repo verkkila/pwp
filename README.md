@@ -5,6 +5,10 @@
 * Student 2. Tuomas Koivuaho tuomas.koivuaho@gmail.com
 * Student 3. Valtteri Erkkilä valtteri.erkkila@gmail.com
 
+# Diary API
+
+Diary API is general logging tool for your everyday tasks. It's simple and efficient to use due to small number of input fields. 
+
 
 ## To run application
 
