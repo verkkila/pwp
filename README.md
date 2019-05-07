@@ -5,3 +5,33 @@
 * Student 2. Tuomas Koivuaho tuomas.koivuaho@gmail.com
 * Student 3. Valtteri Erkkilä valtteri.erkkila@gmail.com
 
+
+## To run application
+
+At top level
+
+* First
+
+        pip install -r requirements.txt
+        export FLASK_APP=diary
+        flask init-db
+
+* optional
+
+        cd db
+        python populate
+        cd ..
+
+* Then
+
+        flask run
+
+
+## Tests
+
+* To run 
+
+    cd to tests or in top level run
+
+        pytest
+
