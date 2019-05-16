@@ -10,23 +10,23 @@
 Diary API is general logging tool for your everyday tasks. It's simple and efficient to use due to small number of input fields. 
 
 
-## To run application
+## Application setup
 
 At top level
 
-* First
+* Install pre-requisites and initialize
 
         pip install -r requirements.txt
         export FLASK_APP=diary
         flask init-db
 
-* optional
+* Populate DB (optional)
 
         cd db
-        python populate
+        python populate_db.py
         cd ..
 
-* Then
+* Run application
 
         flask run
 
