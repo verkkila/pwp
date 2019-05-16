@@ -69,14 +69,23 @@ Add namespaces to link relations.
 *ONLY USED BY COURSE STAFF: Additional comments from the course staff*
 
 ## Meeting 4.
-* **DATE:**
-* **ASSISTANTS:**
+* **DATE:** 25.04.2019
+* **ASSISTANTS:** Mika Oja
 * **GRADE:** *To be filled by course staff*
 
 ### Minutes
-*Summary of what was discussed during the meeting*
+The readme file is still missing content. Using PUT instead of PATCH should be considered with items/events/tasks (PATCH is loosely documented, client likely autofills missing fields with PUT).
+Using url_for instead of regexp allows for more features.
+Schedules must have names.
+Deleting can be done straight from the query, put cascades correctly on foreign keys.
+Document tests, especially put, patch and post.
+Add coverage
+
 
 ### Action points
+-Readme
+-DB foreign keys
+-Test documentation & coverage
 *List here the actions points discussed with assistants*
 
 
