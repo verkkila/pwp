@@ -54,7 +54,7 @@ class EventResource(Resource):
         else:
             return Response(status=204)
 
-    def delete(self, event_id):
+    def delete(self, schedule_id, event_id):
         event_item = Event.query.filter_by(id=event_id).first()
         if event_item is None:
             return DiaryBuilder.create_error_response(404, 'Event does not exist')

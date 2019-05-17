@@ -57,7 +57,7 @@ class TaskResource(Resource):
         else:
             return Response(status=204)
 
-    def delete(self, task_id):
+    def delete(self, schedule_id, task_id):
         task_item = Task.query.filter_by(id=task_id).first()
         if task_item is None:
             return DiaryBuilder.create_error_response(404, 'Task does not exist')
