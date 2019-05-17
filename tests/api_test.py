@@ -3,6 +3,7 @@ import pytest
 import json
 import re
 import sys
+import os
 sys.path.append("../")
 
 from diary import create_app, db
@@ -32,6 +33,11 @@ def app():
 
     yield app
 
+@pytest.fixture(autouse=True)
+def reset_db():
+    os.remove("../db/test.db")
+    os.system("python3 ../db/populate_db.py")
+
 def test_schedule_collection_get(app):
     resp = app.test_client().get(SCHEDULE_COLLECTION_URI)
     assert resp.status_code == 200
@@ -53,13 +59,13 @@ def test_schedule_collection_post(app):
     assert resp3.status_code == 409
 
 def test_schedule_get(app):
-    resp = app.test_client().get(SCHEDULE_COLLECTION_URI + "0/")
+    resp = app.test_client().get(SCHEDULE_COLLECTION_URI + "1/")
     assert resp.status_code == 200
     resp2 = app.test_client().get(SCHEDULE_COLLECTION_URI + "10/")
     assert resp2.status_code == 404
 
 def test_schedule_put(app):
-    resp = app.test_client().put(SCHEDULE_COLLECTION_URI + "0/", data = json.dumps({"name": "testSchedule", "start_time": "2014-03-04 09:00:00", "end_time": "2014-04-05 15:00:00"}))
+    resp = app.test_client().put(SCHEDULE_COLLECTION_URI + "1/", data = json.dumps({"name": "testSchedule", "start_time": "2014-03-04 09:00:00", "end_time": "2014-04-05 15:00:00"}))
     assert resp == 204
     resp2 = app.test_client().put(SCHEDULE_COLLECTION_URI + "10/", data = json.dumps({"name": "testSchedule", "start_time": "2014-03-04 09:00:00", "end_time": "2014-04-05 15:00:00"}))
     assert resp2 == 404
@@ -67,7 +73,7 @@ def test_schedule_put(app):
     assert resp3 == 409
 
 def test_schedule_delete(app):
-    resp = app.test_client().delete(SCHEDULE_COLLECTION_URI + "0/")
+    resp = app.test_client().delete(SCHEDULE_COLLECTION_URI + "1/")
     assert resp.status_code == 204
     resp2 = app.test_client().delete(SCHEDULE_COLLECTION_URI + "10/")
     assert resp2.status_code == 404
