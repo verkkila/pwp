@@ -34,6 +34,10 @@ def db_handle():
     os.close(db_fd)
     os.unlink(db_fname)
 
+@pytest.fixture(autouse=True)
+def reset_db():
+    os.remove("../db/test.db")
+    os.system("python3 ../db/populate_db.py")
 
 def _get_event():
     return Event(
