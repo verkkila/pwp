@@ -16,7 +16,8 @@ from diary.utils import (
     EVENT_URI,
     TASK_COLLECTION_URI,
     TASK_URI,
-    REGEX_PATTERN
+    REGEX_PATTERN,
+    MIMETYPE
     )
 
 @pytest.fixture
@@ -51,11 +52,11 @@ def test_schedule_collection_get(app):
     assert resp.json["@controls"]["diary:add-schedule"]["schema"]["properties"]["end_time"]
 
 def test_schedule_collection_post(app):
-    resp = app.test_client().post(SCHEDULE_COLLECTION_URI, json={"name": "testSchedule1", "start_time": "2014-03-04 08:00:00", "end_time": "2014-04-05 16:00:00"})
+    resp = app.test_client().post(SCHEDULE_COLLECTION_URI, data=json.dumps({"name": "testSchedule1", "start_time": "2014-03-04 08:00:00", "end_time": "2014-04-05 16:00:00"}), content_type=MIMETYPE)
     assert resp.status_code == 201
-    resp2 = app.test_client().post(SCHEDULE_COLLECTION_URI, json={"name": "testSchedule2", "start_time": "2014-03-04 08:00:00"})
+    resp2 = app.test_client().post(SCHEDULE_COLLECTION_URI, data=json.dumps({"name": "testSchedule2", "start_time": "2014-03-04 08:00:00"}), content_type=MIMETYPE)
     assert resp2.status_code == 400
-    resp3 = app.test_client().post(SCHEDULE_COLLECTION_URI, json={"name": "testSchedule1", "start_time": "2014-03-04 08:00:00", "end_time": "2014-04-05 16:00:00"})
+    resp3 = app.test_client().post(SCHEDULE_COLLECTION_URI, data=json.dumps({"name": "testSchedule1", "start_time": "2014-03-04 08:00:00", "end_time": "2014-04-05 16:00:00"}), content_type=MIMETYPE)
     assert resp3.status_code == 409
 
 def test_schedule_get(app):
@@ -65,11 +66,11 @@ def test_schedule_get(app):
     assert resp2.status_code == 404
 
 def test_schedule_put(app):
-    resp = app.test_client().put(SCHEDULE_COLLECTION_URI + "1/", data = json.dumps({"name": "testSchedule", "start_time": "2014-03-04 09:00:00", "end_time": "2014-04-05 15:00:00"}))
+    resp = app.test_client().put(SCHEDULE_COLLECTION_URI + "1/", data=json.dumps({"name": "testSchedule", "start_time": "2014-03-04 09:00:00", "end_time": "2014-04-05 15:00:00"}), content_type=MIMETYPE)
     assert resp == 204
-    resp2 = app.test_client().put(SCHEDULE_COLLECTION_URI + "10/", data = json.dumps({"name": "testSchedule", "start_time": "2014-03-04 09:00:00", "end_time": "2014-04-05 15:00:00"}))
+    resp2 = app.test_client().put(SCHEDULE_COLLECTION_URI + "10/", data=json.dumps({"name": "testSchedule", "start_time": "2014-03-04 09:00:00", "end_time": "2014-04-05 15:00:00"}), content_type=MIMETYPE)
     assert resp2 == 404
-    resp3 = app.test_client().put(SCHEDULE_COLLECTION_URI + "10/", data = "not json")
+    resp3 = app.test_client().put(SCHEDULE_COLLECTION_URI + "10/", data="not json")
     assert resp3 == 409
 
 def test_schedule_delete(app):
@@ -98,11 +99,11 @@ def test_event_collection_get(app):
     assert resp.json["@controls"]["diary:all-schedules"]["href"] == SCHEDULE_COLLECTION_URI
 
 def test_event_collection_post(app):
-    resp = app.test_client().post(EVENT_COLLECTION_URI, data = json.dumps({"name": "testEvent", "duration": 4, "note": "testNote"}))
+    resp = app.test_client().post(EVENT_COLLECTION_URI, data=json.dumps({"name": "testEvent", "duration": 4, "note": "testNote"}), content_type=MIMETYPE)
     assert resp.status_code == 201
-    resp2 = app.test_client().post(EVENT_COLLECTION_URI, data = json.dumps({"name": "testEvent", "duration": 4, "note": "testNote"}))
+    resp2 = app.test_client().post(EVENT_COLLECTION_URI, data=json.dumps({"name": "testEvent", "duration": 4, "note": "testNote"}), content_type=MIMETYPE)
     assert resp2.status_code == 409
-    resp3 = app.test_client().post(EVENT_COLLECTION_URI, data = "not json")
+    resp3 = app.test_client().post(EVENT_COLLECTION_URI, data="not json")
     assert resp3.status_code == 400
 
 def test_event_get(app):
@@ -126,10 +127,10 @@ def test_event_get(app):
     assert resp2.status_code == 404
 
 def test_event_patch(app):
-    resp = app.test_client().patch(re.sub(REGEX_PATTERN, "{}", EVENT_URI).format(1, 1), data = json.dumps({"name": "testEvent", "duration": 6, "note": "new note"}))
+    resp = app.test_client().patch(re.sub(REGEX_PATTERN, "{}", EVENT_URI).format(1, 1), data=json.dumps({"name": "testEvent", "duration": 6, "note": "new note"}), content_type=MIMETYPE)
     assert resp.status_code == 204
-    resp2 = app.test_client().patch(re.sub(REGEX_PATTERN, "{}", EVENT_URI).format(1, 1), data = "not json")
-    assert resp2.status_code == 400
+    resp2 = app.test_client().patch(re.sub(REGEX_PATTERN, "{}", EVENT_URI).format(1, 1), data="not json")
+    assert resp2.status_code == 415
 
 def test_event_delete(app):
     resp = app.test_client().delete(re.sub(REGEX_PATTERN, "{}", EVENT_URI).format(1, 1))
@@ -158,11 +159,11 @@ def test_task_collection_get(app):
     assert resp.json["@controls"]["diary:all-schedules"]["href"] == SCHEDULE_COLLECTION_URI
 
 def test_task_collection_post(app):
-    resp = app.test_client().post(re.sub(REGEX_PATTERN, "{}", TASK_COLLECTION_URI).format(1), data = json.dumps({"name": "testTask", "priority": 10, "goal": "testGoal", "result": "testResult"}))
+    resp = app.test_client().post(re.sub(REGEX_PATTERN, "{}", TASK_COLLECTION_URI).format(1), data=json.dumps({"name": "testTask", "priority": 10, "goal": "testGoal", "result": "testResult"}), content_type=MIMETYPE)
     assert resp.status_code == 201
-    resp2 = app.test_client().post(re.sub(REGEX_PATTERN, "{}", TASK_COLLECTION_URI).format(1), data = json.dumps({"name": "testTask", "priority": 10, "goal": "testGoal", "result": "testResult"}))
+    resp2 = app.test_client().post(re.sub(REGEX_PATTERN, "{}", TASK_COLLECTION_URI).format(1), data=json.dumps({"name": "testTask", "priority": 10, "goal": "testGoal", "result": "testResult"}), content_type=MIMETYPE)
     assert resp2.status_code == 409
-    resp3 = app.test_client().post(re.sub(REGEX_PATTERN, "{}", TASK_COLLECTION_URI).format(1), data = "not json")
+    resp3 = app.test_client().post(re.sub(REGEX_PATTERN, "{}", TASK_COLLECTION_URI).format(1), data="not json")
     assert resp3.status_code == 400
 
 def test_task_get(app):
@@ -186,10 +187,10 @@ def test_task_get(app):
     assert resp2.status_code == 200
 
 def test_task_patch(app):
-    resp = app.test_client().patch(re.sub(REGEX_PATTERN, "{}", TASK_URI).format(1, 1), data = json.dumps({"name": "testTask", "priority": 5, "goal": "new goal", "result": "new result"}))
+    resp = app.test_client().patch(re.sub(REGEX_PATTERN, "{}", TASK_URI).format(1, 1), data=json.dumps({"name": "testTask", "priority": 5, "goal": "new goal", "result": "new result"}), content_type=MIMETYPE)
     assert resp.status_code == 204
-    resp2 = app.test_client().patch(re.sub(REGEX_PATTERN, "{}", TASK_URI).format(1, 1), data = "not json")
-    assert resp2.status_code == 400
+    resp2 = app.test_client().patch(re.sub(REGEX_PATTERN, "{}", TASK_URI).format(1, 1), data="not json")
+    assert resp2.status_code == 415
 
 def test_task_delete(app):
     resp = app.test_client().delete(re.sub(REGEX_PATTERN, "{}", TASK_URI).format(1, 1))
@@ -216,11 +217,11 @@ def test_item_collection_get(app):
     assert resp.json["@controls"]["diary:all-schedules"]["href"] == SCHEDULE_COLLECTION_URI
 
 def test_item_collection_post(app):
-    resp = app.test_client().post(re.sub(REGEX_PATTERN, "{}", ITEM_COLLECTION_URI).format(1), data = json.dumps({"name": "testItem", "value": 10}))
+    resp = app.test_client().post(re.sub(REGEX_PATTERN, "{}", ITEM_COLLECTION_URI).format(1), data=json.dumps({"name": "testItem", "value": 10}), content_type=MIMETYPE)
     assert resp.status_code == 201
-    resp2 = app.test_client().post(re.sub(REGEX_PATTERN, "{}", ITEM_COLLECTION_URI).format(1), data = json.dumps({"name": "testItem", "value": 10}))
+    resp2 = app.test_client().post(re.sub(REGEX_PATTERN, "{}", ITEM_COLLECTION_URI).format(1), data=json.dumps({"name": "testItem", "value": 10}), content_type=MIMETYPE)
     assert resp2.status_code == 409
-    resp3 = app.test_client().post(re.sub(REGEX_PATTERN, "{}", ITEM_COLLECTION_URI).format(1), data = "not json")
+    resp3 = app.test_client().post(re.sub(REGEX_PATTERN, "{}", ITEM_COLLECTION_URI).format(1), data="not json")
     assert resp3.status_code == 400
 
 def test_item_get(app):
@@ -242,10 +243,10 @@ def test_item_get(app):
     assert resp2.status_code == 200
 
 def test_item_patch(app):
-    resp = app.test_client().patch(re.sub(REGEX_PATTERN, "{}", ITEM_URI).format(1, 1), data = json.dumps({"name": "testItem", "value": 5}))
+    resp = app.test_client().patch(re.sub(REGEX_PATTERN, "{}", ITEM_URI).format(1, 1), data=json.dumps({"name": "testItem", "value": 5}), content_type=MIMETYPE)
     assert resp.status_code == 204
-    resp2 = app.test_client().patch(re.sub(REGEX_PATTERN, "{}", ITEM_URI).format(1, 1), data = "not json")
-    assert resp2.status_code == 400
+    resp2 = app.test_client().patch(re.sub(REGEX_PATTERN, "{}", ITEM_URI).format(1, 1), data="not json")
+    assert resp2.status_code == 415
 
 def test_item_delete(app):
     resp = app.test_client().delete(re.sub(REGEX_PATTERN, "{}", ITEM_URI).format(1, 1))
