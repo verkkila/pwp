@@ -109,15 +109,17 @@ Add coverage
 
 
 ## Final meeting
-* **DATE:**
-* **ASSISTANTS:**
+* **DATE:** 16.05.2019
+* **ASSISTANTS:** Ivan Sanchez
 * **GRADE:** *To be filled by course staff*
 
 ### Minutes
-*Summary of what was discussed during the meeting*
+Test coverage for the project was low (65%). Some of the client features didn't work, specifically adding events, items and tasks to schedules.
 
 ### Action points
-*List here the actions points discussed with assistants*
+To improve grade:
+-Increase test coverage
+-Fix broken functionality
 
 
 ### Comments from staff
