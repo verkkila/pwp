@@ -117,9 +117,9 @@ Add coverage
 Test coverage for the project was low (65%). Some of the client features didn't work, specifically adding events, items and tasks to schedules.
 
 ### Action points
-To improve grade:
--Increase test coverage
--Fix broken functionality
+* To improve grade:
+  1. Increase test coverage
+  2. Fix broken functionality
 
 
 ### Comments from staff
