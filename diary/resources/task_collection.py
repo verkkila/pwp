@@ -60,10 +60,14 @@ class TaskCollection(Resource):
             goal=goal,
             result=result
         )
+        s_task = ScheduleTask(
+            schedule_id=schedule_id,
+            task=task
+        )
         try:
-            db.session.add(task)
+            db.session.add(s_task)
             db.session.commit()
         except IntegrityError:
             return DiaryBuilder.create_error_response(409, 'Task already exists')
         else:
-            return Response(201)
+            return Response(status=201)

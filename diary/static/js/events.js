@@ -5,7 +5,7 @@ function updateRow(event){
     let tableRowHtml = "<tr>" + createTableCell(event.id, "id") +
     createTableCell(event.name, "name") +
     createTableCell(event.duration, "duration") +
-    createTableCell(event.value, "value") +
+    createTableCell(event.note, "note") +
     "<td>" + "<form method=\"DELETE\" action=\"/diary/schedules/"  + $.urlParam("schedule_id") +
     "/events/" +  event.id + "/\">" +
     "<input type=\"submit\"  onclick=\"deleteRow(this)\"value=\"&#x2718;\"></input>" +
@@ -28,7 +28,7 @@ function createRows(body){
         let url = "http://localhost:5000/diary/schedules/" + $.urlParam("schedule_id") + "/events/" + $(this).parent().children(".id").html().trim() + "/";
         $.ajax({
             url:url,
-            method:"PUT",
+            method:"PATCH",
             data:JSON.stringify(outData),
             contentType: MASON,
             success: null

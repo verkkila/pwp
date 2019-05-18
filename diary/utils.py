@@ -8,7 +8,7 @@ SCHEDULE_COLLECTION_URI = '/diary/schedules/'
 SCHEDULE_URI = '/diary/schedules/<schedule_id>/'
 
 EVENT_COLLECTION_URI = '/diary/schedules/<schedule_id>/events/'
-EVENT_URI = '/diary/schedules/<schedule_id>/events/<event_id>'
+EVENT_URI = '/diary/schedules/<schedule_id>/events/<event_id>/'
 
 ITEM_COLLECTION_URI = '/diary/schedules/<schedule_id>/items/'
 ITEM_URI = '/diary/schedules/<schedule_id>/items/<item_id>/'

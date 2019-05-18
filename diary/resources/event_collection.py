@@ -57,10 +57,14 @@ class EventCollection(Resource):
             duration=duration,
             note=note
         )
+        s_event= ScheduleEvent(
+            schedule_id=schedule_id,
+            event=event
+        )
         try:
-            db.session.add(event)
+            db.session.add(s_event)
             db.session.commit()
         except IntegrityError:
             return DiaryBuilder.create_error_response(409, 'Event already exists')
         else:
-            return Response(201)
+            return Response(status=201)

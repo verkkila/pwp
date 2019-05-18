@@ -50,13 +50,17 @@ class ItemCollection(Resource):
                 return DiaryBuilder.create_error_response(400, 'Value must be number')
         else:
             return DiaryBuilder.create_error_response(415, 'please json')
-        
         item = Item(
             name=name,
             value=value
         )
+
+        s_item = ScheduleItem(
+            schedule_id=schedule_id,
+            item=item
+        )
         try:
-            db.session.add(item)
+            db.session.add(s_item)
             db.session.commit()
         except IntegrityError:
             return DiaryBuilder.create_error_response(409, 'Item already exists')

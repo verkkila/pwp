@@ -29,7 +29,7 @@ function createRows(body){
         let url = "http://localhost:5000/diary/schedules/" + $.urlParam("schedule_id") + "/tasks/" + $(this).parent().children(".id").html().trim() + "/";
         $.ajax({
             url:url,
-            method:"PUT",
+            method:"PATCH",
             data:JSON.stringify(outData),
             contentType: MASON,
             success: null

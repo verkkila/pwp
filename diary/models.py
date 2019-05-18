@@ -85,4 +85,3 @@ class Item(db.Model):
     value = db.Column(db.Float, nullable=False)
 
     schedule_item = db.relationship('ScheduleItem', back_populates='item', cascade="delete, delete-orphan")
-
